@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="HotChocolate.AspNetCore" Version="16.0.0-p.7.32" />
+      <PackageReference Include="HotChocolate.Execution.Configuration.Abstractions" Version="16.0.0-p.7.32" />
+      <PackageReference Include="HotChocolate.Types" Version="16.0.0-p.7.41" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
+    </ItemGroup>
+
+</Project>

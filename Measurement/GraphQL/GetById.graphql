@@ -1,0 +1,14 @@
+﻿query GetDisplayById($id: ID!) {
+    node(id: $id){
+        ... on DisplayType {
+            id
+        }
+    }
+}
+query GetBatchById($id: ID!) {
+    node(id: $id) {
+        ... on Batch {
+            id
+        }
+    }
+}   

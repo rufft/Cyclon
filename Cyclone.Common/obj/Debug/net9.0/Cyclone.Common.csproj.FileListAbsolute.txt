@@ -1,0 +1,12 @@
+C:\Users\Chuwi\RiderProjects\Cyclon\Cyclone.Common\bin\Debug\net9.0\Cyclone.Common.deps.json
+C:\Users\Chuwi\RiderProjects\Cyclon\Cyclone.Common\bin\Debug\net9.0\Cyclone.Common.dll
+C:\Users\Chuwi\RiderProjects\Cyclon\Cyclone.Common\bin\Debug\net9.0\Cyclone.Common.pdb
+C:\Users\Chuwi\RiderProjects\Cyclon\Cyclone.Common\obj\Debug\net9.0\Cyclone.Common.csproj.AssemblyReference.cache
+C:\Users\Chuwi\RiderProjects\Cyclon\Cyclone.Common\obj\Debug\net9.0\Cyclone.Common.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Chuwi\RiderProjects\Cyclon\Cyclone.Common\obj\Debug\net9.0\Cyclone.Common.AssemblyInfoInputs.cache
+C:\Users\Chuwi\RiderProjects\Cyclon\Cyclone.Common\obj\Debug\net9.0\Cyclone.Common.AssemblyInfo.cs
+C:\Users\Chuwi\RiderProjects\Cyclon\Cyclone.Common\obj\Debug\net9.0\Cyclone.Common.csproj.CoreCompileInputs.cache
+C:\Users\Chuwi\RiderProjects\Cyclon\Cyclone.Common\obj\Debug\net9.0\Cyclone.Common.dll
+C:\Users\Chuwi\RiderProjects\Cyclon\Cyclone.Common\obj\Debug\net9.0\refint\Cyclone.Common.dll
+C:\Users\Chuwi\RiderProjects\Cyclon\Cyclone.Common\obj\Debug\net9.0\Cyclone.Common.pdb
+C:\Users\Chuwi\RiderProjects\Cyclon\Cyclone.Common\obj\Debug\net9.0\ref\Cyclone.Common.dll
