@@ -58,13 +58,17 @@
               "target": "Package",
               "version": "[16.0.0-p.7.32, )"
             },
-            "HotChocolate.Types": {
+            "HotChocolate.Types.Abstractions": {
               "target": "Package",
-              "version": "[16.0.0-p.7.41, )"
+              "version": "[16.0.0-p.7.51, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[9.0.8, )"
+            },
+            "StrawberryShake.Core": {
+              "target": "Package",
+              "version": "[16.0.0-p.7.51, )"
             }
           },
           "imports": [

@@ -165,7 +165,7 @@ input DisplayTypeFilterInput {
   comment: StringOperationFilterInput
   batches: ListFilterInputTypeOfBatchFilterInput
   displays: ListFilterInputTypeOfDisplayFilterInput
-  id: IdOperationFilterInput
+  id: UuidOperationFilterInput
   creationTime: DateTimeOperationFilterInput
   modificationTime: DateTimeOperationFilterInput
   isDeleted: BooleanOperationFilterInput
@@ -202,7 +202,7 @@ input DisplayFilterInput {
   originalPhotoPath: StringOperationFilterInput
   croppedPhotoPath: StringOperationFilterInput
   comment: StringOperationFilterInput
-  id: IdOperationFilterInput
+  id: UuidOperationFilterInput
   creationTime: DateTimeOperationFilterInput
   modificationTime: DateTimeOperationFilterInput
   isDeleted: BooleanOperationFilterInput
@@ -240,7 +240,7 @@ input BatchFilterInput {
   cover: CoverOperationFilterInput
   description: StringOperationFilterInput
   displays: ListFilterInputTypeOfDisplayFilterInput
-  id: IdOperationFilterInput
+  id: UuidOperationFilterInput
   creationTime: DateTimeOperationFilterInput
   modificationTime: DateTimeOperationFilterInput
   isDeleted: BooleanOperationFilterInput
@@ -353,11 +353,19 @@ input ListFilterInputTypeOfDisplayFilterInput {
   any: Boolean
 }
 
-input IdOperationFilterInput {
-  eq: ID
-  neq: ID
-  in: [ID]
-  nin: [ID]
+input UuidOperationFilterInput {
+  eq: UUID
+  neq: UUID
+  in: [UUID]
+  nin: [UUID]
+  gt: UUID
+  ngt: UUID
+  gte: UUID
+  ngte: UUID
+  lt: UUID
+  nlt: UUID
+  lte: UUID
+  nlte: UUID
 }
 
 input DateTimeOperationFilterInput {
@@ -388,21 +396,6 @@ enum SortEnumType {
 input SizeSortInput {
   width: SortEnumType
   height: SortEnumType
-}
-
-input UuidOperationFilterInput {
-  eq: UUID
-  neq: UUID
-  in: [UUID]
-  nin: [UUID]
-  gt: UUID
-  ngt: UUID
-  gte: UUID
-  ngte: UUID
-  lt: UUID
-  nlt: UUID
-  lte: UUID
-  nlte: UUID
 }
 
 input CoordinatesFilterInput {

@@ -9,8 +9,9 @@
     <ItemGroup>
       <PackageReference Include="HotChocolate.AspNetCore" Version="16.0.0-p.7.32" />
       <PackageReference Include="HotChocolate.Execution.Configuration.Abstractions" Version="16.0.0-p.7.32" />
-      <PackageReference Include="HotChocolate.Types" Version="16.0.0-p.7.41" />
+      <PackageReference Include="HotChocolate.Types.Abstractions" Version="16.0.0-p.7.51" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
+      <PackageReference Include="StrawberryShake.Core" Version="16.0.0-p.7.51" />
     </ItemGroup>
 
 </Project>

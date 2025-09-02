@@ -10,3 +10,4 @@ C:\Users\Chuwi\RiderProjects\Cyclon\Cyclone.Common\obj\Debug\net9.0\Cyclone.Comm
 C:\Users\Chuwi\RiderProjects\Cyclon\Cyclone.Common\obj\Debug\net9.0\refint\Cyclone.Common.dll
 C:\Users\Chuwi\RiderProjects\Cyclon\Cyclone.Common\obj\Debug\net9.0\Cyclone.Common.pdb
 C:\Users\Chuwi\RiderProjects\Cyclon\Cyclone.Common\obj\Debug\net9.0\ref\Cyclone.Common.dll
+C:\Users\Chuwi\RiderProjects\Cyclon\Cyclone.Common\obj\Debug\net9.0\Cyclone.Common.sourcelink.json

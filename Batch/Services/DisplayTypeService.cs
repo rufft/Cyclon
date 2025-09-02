@@ -56,8 +56,7 @@ public class DisplayTypeService(BatchDbContext db) : SimpleService<DisplayType, 
 
     public async Task<Response<DisplayType>> UpdateDisplayTypeAsync(DisplayTypeUpdateDto dto)
     {
-        if (!Guid.TryParse(dto.Id, out var id))
-            return "Id имеет неверный формат GUID.";
+        var id  = dto.Id;
 
         var displayType = await Db.DisplayTypes.FindAsync(id);
         if (displayType == null)

@@ -8,7 +8,7 @@ public record BatchUpdateDto
     [ID]
     [Required(ErrorMessage = "Введите Id партии!")]
     [FieldStringLength(ValidationConstants.ID_MAX_LEN)]
-    public string Id { get; init; }
+    public Guid Id { get; init; }
     
     [SRange(ValidationConstants.BATCH_NUM_MIN, ValidationConstants.BATCH_NUM_MAX)]
     public int? Number { get; init; }

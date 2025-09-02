@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Cyclone.Common")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0b8806dedbe1e1b1ea5d4c84e209dc966701b02b")]
 [assembly: System.Reflection.AssemblyProductAttribute("Cyclone.Common")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Cyclone.Common")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

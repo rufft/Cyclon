@@ -21,15 +21,13 @@ public class BatchService(BatchDbContext db) : SimpleService<Models.Batch, Batch
             return $"Имя не может быть пустым или быть больше {BATCH_NAME_MAX} символов";
         if (!string.IsNullOrWhiteSpace(dto.Description) && dto.Description.Length > BATCH_DESC_MAX)
             return $"Описание не может быть больше {BATCH_DESC_MAX}";
-        if (!Guid.TryParse(dto.DisplayTypeId, out var displayTypeId))
-            return "DisplayTypeId имеет неверный формат GUID.";
         if (!Enum.TryParse<DisplayColor>(dto.Color, ignoreCase: true, out var color))
             return $"Неверный формат цвета: {dto.Color}";
         
         
-        var displayType = await Db.FindAsync<DisplayType>(displayTypeId);
+        var displayType = await Db.FindAsync<DisplayType>(dto.DisplayTypeId);
         if (displayType == null)
-            return $"Тип дисплея с id-- {displayTypeId} не существует";
+            return $"Тип дисплея с id-- {dto.DisplayTypeId} не существует";
         
         var coverResponse = CoverHelper.FromCoverArray(dto.Cover, displayType.AmountRows);
         
@@ -43,8 +41,7 @@ public class BatchService(BatchDbContext db) : SimpleService<Models.Batch, Batch
 
     public async Task<Response<Models.Batch>> UpdateBatchAsync(BatchUpdateDto dto)
     {
-        if (!Guid.TryParse(dto.Id, out var id))
-            return "Id имеет неверный формат GUID.";
+        var id = dto.Id;
         var batch = await Db.FindAsync<Models.Batch>(id);
         if (batch == null)
             return $"Партии с id-- {dto.Id} не существует";

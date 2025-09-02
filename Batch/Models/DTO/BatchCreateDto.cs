@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Batch.Extensions.Validation;
+using Batch.Models.Displays;
 using static Batch.Extensions.Validation.ValidationConstants;
 
 namespace Batch.Models.DTO;
@@ -15,9 +16,9 @@ public record BatchCreateDto
     public string? Name { get; init; }
 
     [ID]
-    [Required(ErrorMessage = "Введите Id дисплея!")]
+    [Required(ErrorMessage = "Введите Id типа дисплея!")]
     [FieldStringLength(ID_MAX_LEN)]
-    public string? DisplayTypeId { get; init; }
+    public Guid? DisplayTypeId { get; init; }
     
     [Required(ErrorMessage = "Введите цвет дисплеев!")]
     [FieldStringLength(BATCH_COLOR_MAX)]
