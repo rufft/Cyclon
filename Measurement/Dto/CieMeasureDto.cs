@@ -2,7 +2,7 @@
 
 namespace Measurement.Dto;
 
-public class CreateCieMeasureDto : MeasureDto
+public record CreateCieMeasureDto : MeasureDto
 {
     [Required(ErrorMessage = "Введите cie x")]
     [Range(0, 1, ErrorMessage = "Cie x, y должен быть от 0 до 1")]
@@ -17,7 +17,7 @@ public class CreateCieMeasureDto : MeasureDto
     public double? Lv { get; init; }
 }
 
-public class UpdateCieMeasureDto : MeasureDto
+public record UpdateCieMeasureDto : MeasureDto
 {
     [Range(0, 1, ErrorMessage = "Cie x, y должен быть от 0 до 1")]
     public double? CieX { get; init; }

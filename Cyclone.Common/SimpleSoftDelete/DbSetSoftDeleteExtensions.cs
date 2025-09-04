@@ -1,4 +1,7 @@
-﻿using Cyclone.Common.SimpleEntity;
+﻿using System.Reflection;
+using Cyclone.Common.SimpleEntity;
+using Cyclone.Common.SimpleService;
+using Cyclone.Common.SimpleSoftDelete.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
@@ -6,7 +9,6 @@ namespace Cyclone.Common.SimpleSoftDelete;
 
 public static class DbSetSoftDeleteExtensions
 {
-// Public API: soft delete by id
     public static Task<int> SoftDeleteCascadeAsync<T>(
         this DbSet<T> set,
         Guid id,
@@ -21,7 +23,6 @@ public static class DbSetSoftDeleteExtensions
         return SoftDeleteCascadeCoreAsync(db, set, id, deletedBy, useTransaction, cancellationToken);
     }
 
-    // Public API: soft delete by loaded entity
     public static Task<int> SoftDeleteCascadeAsync<T>(
         this DbSet<T> set,
         T rootEntity,
@@ -37,7 +38,6 @@ public static class DbSetSoftDeleteExtensions
         return SoftDeleteCascadeCoreAsync(db, set, rootEntity, deletedBy, useTransaction, cancellationToken);
     }
 
-    // Core: find entity by id, then delegate to entity-based method
     private static async Task<int> SoftDeleteCascadeCoreAsync<T>(
         DbContext db,
         DbSet<T> set,
@@ -52,7 +52,6 @@ public static class DbSetSoftDeleteExtensions
         return await SoftDeleteCascadeCoreAsync(db, set, root, deletedBy, useTransaction, cancellationToken);
     }
 
-    // Core: main implementation
     private static async Task<int> SoftDeleteCascadeCoreAsync<T>(
         DbContext db,
         DbSet<T> set,
@@ -62,7 +61,6 @@ public static class DbSetSoftDeleteExtensions
         CancellationToken cancellationToken)
         where T : BaseEntity
     {
-        // Use execution strategy because of retry policies (Npgsql)
         var strategy = db.Database.CreateExecutionStrategy();
 
         return await strategy.ExecuteAsync(async () =>
@@ -70,21 +68,25 @@ public static class DbSetSoftDeleteExtensions
             if (useTransaction)
             {
                 await using var tx = await db.Database.BeginTransactionAsync(cancellationToken);
-                var cnt = await SoftDeleteRecursiveInternalAsync(db, rootEntity, deletedBy, new HashSet<Guid>(), cancellationToken);
+                var cnt = await SoftDeleteRecursiveInternalAsync(db, rootEntity, deletedBy, [], cancellationToken);
                 await db.SaveChangesAsync(cancellationToken);
                 await tx.CommitAsync(cancellationToken);
                 return cnt;
             }
             else
             {
-                var cnt = await SoftDeleteRecursiveInternalAsync(db, rootEntity, deletedBy, new HashSet<Guid>(), cancellationToken);
+                var cnt = await SoftDeleteRecursiveInternalAsync(db, rootEntity, deletedBy, [], cancellationToken);
                 await db.SaveChangesAsync(cancellationToken);
+                if (cnt <= 0) return cnt;
+                var publisher = db.GetService<IDeletionEventPublisher>();
+                var originService = Assembly.GetEntryAssembly()!.GetName().Name!;
+                await publisher.PublishAsync<T>(rootEntity.Id, originService, deletedBy, cascade: true, ct: cancellationToken);
+
                 return cnt;
             }
         });
     }
 
-    // Core recursive worker (uses explicit policies)
     private static async Task<int> SoftDeleteRecursiveInternalAsync(
         DbContext db,
         object entityObj,
@@ -97,7 +99,6 @@ public static class DbSetSoftDeleteExtensions
 
         var marked = 0;
 
-        // mark self if needed
         if (!be.IsDeleted)
         {
             be.IsDeleted = true;
@@ -109,7 +110,6 @@ public static class DbSetSoftDeleteExtensions
             marked++;
         }
 
-        // get policies for this entity type
         var policies = SoftDeletePolicyRegistry.GetPoliciesFor(entityObj.GetType());
         if (policies.Count == 0) return marked;
 
@@ -119,27 +119,22 @@ public static class DbSetSoftDeleteExtensions
             {
                 if (nav.IsCollection)
                 {
-                    // Collection navigation: use Query().IgnoreQueryFilters() to get deleted children too
                     var collEntry = db.Entry(entityObj).Collection(nav.NavigationName);
-                    var query = collEntry.Query(); // non-generic IQueryable
-                    // We will pull into memory as BaseEntity and then cast to child type and apply predicate (if any)
+                    var query = collEntry.Query();
                     var list = await query
-                        .OfType<BaseEntity>()            // now IQueryable<BaseEntity>
+                        .OfType<BaseEntity>()
                         .IgnoreQueryFilters()
                         .ToListAsync(cancellationToken);
 
                     foreach (var childBase in list)
                     {
-                        // check runtime type
                         if (!nav.ChildType.IsInstanceOfType(childBase)) continue;
-                        // predicate check
                         if (nav.Predicate != null && !nav.Predicate(childBase)) continue;
                         marked += await SoftDeleteRecursiveInternalAsync(db, childBase, deletedBy, visited, cancellationToken);
                     }
                 }
                 else
                 {
-                    // Reference navigation
                     var refEntry = db.Entry(entityObj).Reference(nav.NavigationName);
                     var childObj = await refEntry.Query()
                         .OfType<BaseEntity>()
@@ -156,14 +151,13 @@ public static class DbSetSoftDeleteExtensions
             catch (InvalidOperationException)
             {
                 throw new Exception("Ошибка ");
-                continue;
             }
         }
 
         return marked;
     }
 
-    // ---------------- Restore (mirror) ----------------
+    // ---------------- Restore ----------------
 
     public static Task<int> RestoreCascadeAsync<T>(
         this DbSet<T> set,
@@ -173,7 +167,7 @@ public static class DbSetSoftDeleteExtensions
         CancellationToken cancellationToken = default)
         where T : BaseEntity
     {
-        if (set == null) throw new ArgumentNullException(nameof(set));
+        ArgumentNullException.ThrowIfNull(set);
         var current = set.GetService<ICurrentDbContext>();
         var db = current.Context ?? throw new InvalidOperationException("Не удалось получить DbContext из DbSet.");
         return RestoreCascadeCoreAsync(db, set, id, restoredBy, useTransaction, cancellationToken);
@@ -203,7 +197,6 @@ public static class DbSetSoftDeleteExtensions
         CancellationToken cancellationToken)
         where T : BaseEntity
     {
-        // Fetch with IgnoreQueryFilters so we can restore root even if deleted
         var root = await set.IgnoreQueryFilters().FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
         if (root == null) throw new InvalidOperationException($"Сущность {typeof(T).Name} с id={id} не найдена (даже через IgnoreQueryFilters).");
         return await RestoreCascadeCoreAsync(db, set, root, restoredBy, useTransaction, cancellationToken);

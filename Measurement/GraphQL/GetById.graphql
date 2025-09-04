@@ -1,14 +1,5 @@
-﻿query GetDisplayById($id: ID!) {
-    node(id: $id){
-        ... on DisplayType {
-            id
-        }
+﻿query TryGetDisplayById($id: UUID!) {
+    displayById(id: $id) {
+        id
     }
 }
-query GetBatchById($id: ID!) {
-    node(id: $id) {
-        ... on Batch {
-            id
-        }
-    }
-}   

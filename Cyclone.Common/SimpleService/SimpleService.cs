@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cyclone.Common.SimpleService;
 
-public class SimpleService<TEntity, TTDbContext>(TTDbContext db)
+public class SimpleService<TEntity, TDbContext>(TDbContext db)
     where TEntity : BaseEntity 
-    where TTDbContext : SimpleDbContext
+    where TDbContext : SimpleDbContext
 {
-    protected readonly TTDbContext Db = db;
+    protected readonly TDbContext Db = db;
 
     protected async Task<Response<TEntity>> CreateAsync(TEntity entity)
     {

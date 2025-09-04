@@ -5,7 +5,6 @@ namespace Batch.Models.DTO;
 
 public record BatchUpdateDto
 {
-    [ID]
     [Required(ErrorMessage = "Введите Id партии!")]
     [FieldStringLength(ValidationConstants.ID_MAX_LEN)]
     public Guid Id { get; init; }

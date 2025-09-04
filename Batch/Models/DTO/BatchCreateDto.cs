@@ -15,7 +15,6 @@ public record BatchCreateDto
     [FieldStringLength(BATCH_NAME_MAX)]
     public string? Name { get; init; }
 
-    [ID]
     [Required(ErrorMessage = "Введите Id типа дисплея!")]
     [FieldStringLength(ID_MAX_LEN)]
     public Guid? DisplayTypeId { get; init; }

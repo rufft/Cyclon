@@ -55,10 +55,8 @@ public static class SoftDeletePolicyRegistry
     {
         return lambda.Body switch
         {
-            // ожидаем MemberExpression: p => p.SomeNav
             MemberExpression me => me.Member.Name,
                 
-            // возможно: UnaryExpression (например при конверсиях)
             UnaryExpression { Operand: MemberExpression me2 } => me2.Member.Name,
             _ => throw new ArgumentException(
                 "Нельзя получить имя навигации из выражения. Используйте простой селектор: x => x.NavProperty")

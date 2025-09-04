@@ -8,11 +8,18 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.8"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.8">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8" />
         <PackageReference Include="StrawberryShake" Version="16.0.0-p.7.41" />
-        <PackageReference Include="StrawberryShake.Transport.Http" Version="16.0.0-p.7.41" />
+        <PackageReference Include="StrawberryShake.Server" Version="16.0.0-p.7.41" />
+        <PackageReference Include="StrawberryShake.Transport.Http" Version="16.0.0-p.7.59" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Batch\Batch.csproj" />
       <ProjectReference Include="..\Cyclone.Common\Cyclone.Common.csproj" />
     </ItemGroup>
 

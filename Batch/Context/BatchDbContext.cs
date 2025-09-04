@@ -7,12 +7,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Batch.Context;
 
-public class BatchDbContext : SimpleDbContext
+public class BatchDbContext(DbContextOptions<BatchDbContext> options)
+    : SimpleDbContext(options, typeof(Models.Batch).Assembly)
 {
-    public BatchDbContext(DbContextOptions<BatchDbContext> options) : base(options, typeof(Models.Batch).Assembly)
-    {
-    }
-
     public DbSet<Models.Batch> Batches => Set<Models.Batch>();
     public DbSet<Display> Displays => Set<Display>();
     public DbSet<DisplayType> DisplayTypes => Set<DisplayType>();

@@ -12,6 +12,12 @@ public class CieMeasure : Measure
         Cie = cie;
         Lv = lv;
     }
+    public CieMeasure(Guid displayId, double cieX, double cieY, double lv)
+    {
+        DisplayId = displayId;
+        Cie = new Cie(cieX, cieY);
+        Lv = lv;
+    }
     
     public Cie Cie { get; init; }
     public double Lv { get; init; }

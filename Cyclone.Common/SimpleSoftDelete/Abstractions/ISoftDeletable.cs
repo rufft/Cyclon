@@ -1,4 +1,4 @@
-﻿namespace Cyclone.Common.SimpleSoftDelete;
+﻿namespace Cyclone.Common.SimpleSoftDelete.Abstractions;
 
 public interface ISoftDeletable
 {

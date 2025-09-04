@@ -1,6 +1,4 @@
 ﻿using System.Reflection;
-using Cyclone.Common.SimpleDatabase;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Cyclone.Common.SimpleService;

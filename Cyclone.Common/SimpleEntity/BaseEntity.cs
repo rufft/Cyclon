@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Cyclone.Common.SimpleSoftDelete;
+using Cyclone.Common.SimpleSoftDelete.Abstractions;
 
 namespace Cyclone.Common.SimpleEntity;
 

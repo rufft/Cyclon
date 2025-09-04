@@ -12,12 +12,18 @@ public class Mutation
     private readonly BatchService _batchService;
     private readonly DisplayTypeService _displayTypeService;
     private readonly BatchDbContext _db;
+    private readonly DisplayService _displayService;
 
-    public Mutation(BatchService batchService, BatchDbContext db, DisplayTypeService displayTypeService)
+    public Mutation(
+        BatchService batchService,
+        BatchDbContext db,
+        DisplayTypeService displayTypeService,
+        DisplayService displayService)
     {
         _batchService = batchService;
         _db = db;
         _displayTypeService = displayTypeService;
+        _displayService = displayService;
     }
     
     // ==== Batch ====
@@ -62,4 +68,14 @@ public class Mutation
         return await _displayTypeService.RestoreDisplayTypeAsync(displayTypeId);
     }
     
+    // ==== Display ====
+    public async Task<Response<int>> SoftDeleteDisplayAsync(string displayTypeId)
+    {
+        return await _displayService.SoftDeleteDisplayAsync(displayTypeId);
+    }
+    
+    public async Task<Response<int>> RestoreDisplayAsync(string displayTypeId)
+    {
+        return await _displayService.RestoreDisplayAsync(displayTypeId);
+    }
 }

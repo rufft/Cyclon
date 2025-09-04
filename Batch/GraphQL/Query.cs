@@ -25,13 +25,17 @@ public class Query
     [UsePaging]
     [UseFiltering]
     [UseSorting]
-    public IQueryable<Models.Batch> Batches([Service] BatchDbContext database)
-    {
-        return database.Batches
+    public IQueryable<Models.Batch> Batches([Service] BatchDbContext database) =>
+        database.Batches
             .Include(x => x.DisplayType)
             .Include(x => x.Displays)
             .ThenInclude(x => x.DisplayType)
             .AsNoTracking();
-    }
+
+    public async Task<Display?> GetDisplayByIdAsync([Service] BatchDbContext database, Guid id) =>
+        await database.Displays.FindAsync(id);
+    
+    public async Task<Models.Batch?> GetBatchByIdAsync([Service] BatchDbContext database, Guid id) =>
+        await database.Batches.FindAsync(id);
 
 }

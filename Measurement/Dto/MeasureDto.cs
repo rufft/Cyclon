@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using HotChocolate;
+using HotChocolate.Types;
 
 namespace Measurement.Dto;
 
-public abstract class MeasureDto
+public abstract record MeasureDto
 {
     [Required(ErrorMessage = "Введите id дисплея")]
-    [StringLength(200)]
-    public string DisplayId { get; init; }
+    public Guid? DisplayId { get; init; }
 }

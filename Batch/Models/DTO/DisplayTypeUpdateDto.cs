@@ -5,7 +5,6 @@ namespace Batch.Models.DTO;
 
 public record DisplayTypeUpdateDto
 {
-    [ID]
     [Required(ErrorMessage = "Введите id")]
     public Guid? Id { get; init; }
     
