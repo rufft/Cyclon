@@ -44,7 +44,7 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod());
 });
 
-
+builder.Services.AddDeletionPublisher();
 builder.Services.AddSoftDeleteEventSystem();
 
 builder.Services.AddSubscription("OnDisplayDelete", MeasurementDeletionHandlers.OnDisplayDeleteHandler);

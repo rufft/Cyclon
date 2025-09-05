@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Cyclone.Common.SimpleDatabase;
 using Cyclone.Common.SimpleEntity;
 using Cyclone.Common.SimpleSoftDelete.Abstractions;
 using Microsoft.EntityFrameworkCore;
@@ -16,8 +17,8 @@ public static class DbSetSoftDeleteExtensions
         where T : BaseEntity
     {
         ArgumentNullException.ThrowIfNull(set);
-        var current = set.GetService<ICurrentDbContext>();
-        var db = current.Context ?? throw new InvalidOperationException("Не удалось получить DbContext из DbSet.");
+        var db = set.GetService<SimpleDbContext>()
+                 ?? throw new InvalidOperationException("Не удалось получить DbContext из DbSet.");
         var entity = await db.FindAsync<T>(id, cancellationToken);
         if (entity == null) throw new ArgumentNullException($"Сущность с типом {typeof(T).Name} и id-- {id} не найдена");
         

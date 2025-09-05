@@ -20,7 +20,6 @@ builder.Services.AddDbContext<BatchDbContext>((sp, options) =>
         b.MigrationsAssembly(typeof(BatchDbContext).Assembly.FullName));
     options.AddInterceptors(sp.GetRequiredService<SoftDeletePublishInterceptor>());
 });
-
 builder.Services.AddSimpleServices();
 builder.Services.AddScoped<Query>();
 builder.Services.AddScoped<Mutation>();

@@ -3,21 +3,24 @@
 using Cyclone.Common.SimpleSoftDelete.Abstractions;
 using HotChocolate.Subscriptions;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Cyclone.Common.SimpleSoftDelete;
 
 public sealed class DeletionListenerHostedService(
     ITopicEventReceiver receiver,
     IDeletionSubscriptionRegistry registry,
-    IServiceProvider services) : BackgroundService
+    IServiceProvider services,
+    ILogger<DeletionListenerHostedService> logger) : BackgroundService
 {
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        logger.LogDebug("Starting deletion listener.");
         var all = registry.GetAll();
 
         foreach (var (topic, handlers) in all)
         {
-            _ = Task.Run(async () =>
+            Task.Run(async () =>
             {
                 var stream = await receiver.SubscribeAsync<DeletionEvent>(topic, stoppingToken);
 
@@ -25,10 +28,16 @@ public sealed class DeletionListenerHostedService(
                 {
                     foreach (var h in handlers)
                     {
-                        try { await h(ev, services, stoppingToken); }
+                        logger.LogDebug($"{handlers.Count} handler found for {topic}");
+
+                        try
+                        {
+                            await h(ev, services, stoppingToken); 
+                            logger.LogDebug($"{handlers.Count} handler processed for {topic}");
+                        }
                         catch (Exception ex)
                         {
-                            // TODO Logger
+                            if (ex != null) logger.LogError(ex, ex.Message);
                         }
                     }
                 }
