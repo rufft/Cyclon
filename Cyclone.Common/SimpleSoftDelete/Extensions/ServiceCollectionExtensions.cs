@@ -2,8 +2,12 @@
 using Cyclone.Common.SimpleDatabase;
 using Cyclone.Common.SimpleEntity;
 using Cyclone.Common.SimpleSoftDelete.Abstractions;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 
 namespace Cyclone.Common.SimpleSoftDelete.Extensions;
 
@@ -101,15 +105,12 @@ public static class ServiceCollectionExtensions
         string subscriptionNameOrTopic,
         DeletionEventHandler handler)
     {
-        services.AddSingleton<IDeletionSubscriptionRegistry, DeletionSubscriptionRegistry>(
-            sp => {
-                var reg = sp.GetService<IDeletionSubscriptionRegistry>() as DeletionSubscriptionRegistry
-                          ?? new DeletionSubscriptionRegistry();
-                reg.Subscribe(subscriptionNameOrTopic, handler);
-                return reg;
-            });
+        services.TryAddSingleton<IDeletionSubscriptionRegistry, DeletionSubscriptionRegistry>();
 
-        services.AddHostedService<DeletionListenerHostedService>();
+        // Регистрируем «конфигуратор» как отдельный singleton, чтобы НЕ перерегистрировать сам реестр
+        services.AddSingleton<IStartupFilter>(new SubscribeStartupFilter(subscriptionNameOrTopic, handler));
+
+        services.TryAddEnumerable(ServiceDescriptor.Singleton<IHostedService, DeletionListenerHostedService>());
         return services;
     }
 
@@ -117,4 +118,20 @@ public static class ServiceCollectionExtensions
         string entityType,
         DeletionEventHandler handler)
         => services.AddSubscription(DeletionTopics.For(entityType), handler);
+}
+public sealed class SubscribeStartupFilter : IStartupFilter
+{
+    private readonly string _topic;
+    private readonly DeletionEventHandler _handler;
+
+    public SubscribeStartupFilter(string topic, DeletionEventHandler handler)
+        => (_topic, _handler) = (topic, handler);
+
+    public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next)
+        => app =>
+        {
+            var reg = app.ApplicationServices.GetRequiredService<IDeletionSubscriptionRegistry>();
+            reg.Subscribe(_topic, _handler);
+            next(app);
+        };
 }

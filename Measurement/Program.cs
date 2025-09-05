@@ -22,13 +22,11 @@ builder.Services.AddDbContext<MeasureDbContext>((sp, options) =>
 });
 
 builder.Services.AddSimpleServices();
-builder.Services.AddScoped<Query>();
-builder.Services.AddScoped<Mutation>();
 
 builder.Services
     .AddGraphQLServer()
     .AddQueryType<Query>()
-    .AddMutationType<Mutation>()
+    //.AddMutationType<Mutation>()
     .AddProjections()
     .AddFiltering()
     .AddSorting()
@@ -45,6 +43,7 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader()
             .AllowAnyMethod());
 });
+
 
 builder.Services.AddSoftDeleteEventSystem();
 
