@@ -16,6 +16,7 @@
         <PackageReference Include="StrawberryShake" Version="16.0.0-p.7.41" />
         <PackageReference Include="StrawberryShake.Server" Version="16.0.0-p.7.41" />
         <PackageReference Include="StrawberryShake.Transport.Http" Version="16.0.0-p.7.59" />
+        <PackageReference Include="StrawberryShake.Transport.WebSockets" Version="16.0.0-p.7.63" />
     </ItemGroup>
 
     <ItemGroup>

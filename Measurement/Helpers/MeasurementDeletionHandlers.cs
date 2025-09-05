@@ -1,0 +1,22 @@
+﻿using Cyclone.Common.SimpleDatabase;
+using Cyclone.Common.SimpleSoftDelete;
+using Cyclone.Common.SimpleSoftDelete.Extensions;
+using Measurement.Models.MeasureTypes;
+using Microsoft.EntityFrameworkCore;
+
+namespace Measurement.Helpers;
+
+public static class MeasurementDeletionHandlers
+{
+    public static async Task OnDisplayDeleteHandler(DeletionEvent ev, IServiceProvider sp, CancellationToken ct)
+    {
+        var dbContext = sp.GetService<SimpleDbContext>();
+        if (dbContext is null) throw new NullReferenceException("DbContext не существует");
+        
+        var cieMeasures = dbContext.Set<CieMeasure>().Where(m => m.DisplayId == ev.EntityId);
+        foreach (var measure in cieMeasures)
+        {
+            await dbContext.Set<CieMeasure>().SoftDeleteCascadeAsync(measure, cancellationToken: ct);
+        }
+    }
+}

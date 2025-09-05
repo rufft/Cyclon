@@ -1,14 +1,35 @@
 ﻿using System.Reflection;
 using Cyclone.Common.SimpleEntity;
-using Cyclone.Common.SimpleService;
 using Cyclone.Common.SimpleSoftDelete.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
-namespace Cyclone.Common.SimpleSoftDelete;
+namespace Cyclone.Common.SimpleSoftDelete.Extensions;
 
 public static class DbSetSoftDeleteExtensions
 {
+    public static async Task SoftDeleteAsync<T>(
+        this DbSet<T> set,
+        Guid id,
+        string? deletedBy = null,
+        CancellationToken cancellationToken = default)
+        where T : BaseEntity
+    {
+        ArgumentNullException.ThrowIfNull(set);
+        var current = set.GetService<ICurrentDbContext>();
+        var db = current.Context ?? throw new InvalidOperationException("Не удалось получить DbContext из DbSet.");
+        var entity = await db.FindAsync<T>(id, cancellationToken);
+        if (entity == null) throw new ArgumentNullException($"Сущность с типом {typeof(T).Name} и id-- {id} не найдена");
+        
+        if (entity.IsDeleted) return;
+        
+        entity.IsDeleted = true;
+        entity.DeletedBy = deletedBy;
+        entity.DeletedAt = DateTime.Now;
+        
+        await db.SaveChangesAsync(cancellationToken);;
+    }
+    
     public static Task<int> SoftDeleteCascadeAsync<T>(
         this DbSet<T> set,
         Guid id,
@@ -17,8 +38,8 @@ public static class DbSetSoftDeleteExtensions
         CancellationToken cancellationToken = default)
         where T : BaseEntity
     {
-    ArgumentNullException.ThrowIfNull(set);
-    var current = set.GetService<ICurrentDbContext>();
+        ArgumentNullException.ThrowIfNull(set);
+        var current = set.GetService<ICurrentDbContext>();
         var db = current.Context ?? throw new InvalidOperationException("Не удалось получить DbContext из DbSet.");
         return SoftDeleteCascadeCoreAsync(db, set, id, deletedBy, useTransaction, cancellationToken);
     }
@@ -291,3 +312,4 @@ public static class DbSetSoftDeleteExtensions
         return restored;
     }
 }
+

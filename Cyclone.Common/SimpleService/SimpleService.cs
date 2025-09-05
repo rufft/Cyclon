@@ -2,6 +2,7 @@
 using Cyclone.Common.SimpleEntity;
 using Cyclone.Common.SimpleResponse;
 using Cyclone.Common.SimpleSoftDelete;
+using Cyclone.Common.SimpleSoftDelete.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cyclone.Common.SimpleService;

@@ -9,8 +9,8 @@ namespace Measurement.GraphQL;
 public class Mutation(CieMeasureService cieMeasureService, MeasureDbContext db)
 {
 
-    public async Task<Response<CieMeasure>> CreateCieMeasureAsync(CreateCieMeasureDto input)
-    {
-        return await cieMeasureService.CreateAsync(input);
-    }
+    // public async Task<Response<CieMeasure>> CreateCieMeasureAsync(CreateCieMeasureDto input)
+    // {
+    //     return await cieMeasureService.CreateAsync(input);
+    // }
 }

@@ -1573,11 +1573,11 @@
           }
         }
       },
-      "StrawberryShake.Core/16.0.0-p.7.51": {
+      "StrawberryShake.Core/16.0.0-p.7.63": {
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.4",
-          "StrawberryShake.Resources": "16.0.0-p.7.51"
+          "StrawberryShake.Resources": "16.0.0-p.7.63"
         },
         "compile": {
           "lib/net9.0/StrawberryShake.Core.dll": {
@@ -1590,7 +1590,7 @@
           }
         }
       },
-      "StrawberryShake.Resources/16.0.0-p.7.51": {
+      "StrawberryShake.Resources/16.0.0-p.7.63": {
         "type": "package",
         "compile": {
           "lib/net9.0/StrawberryShake.Resources.dll": {
@@ -1599,6 +1599,24 @@
         },
         "runtime": {
           "lib/net9.0/StrawberryShake.Resources.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "StrawberryShake.Transport.WebSockets/16.0.0-p.7.63": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Options": "9.0.2",
+          "StrawberryShake.Core": "16.0.0-p.7.63",
+          "StrawberryShake.Resources": "16.0.0-p.7.63"
+        },
+        "compile": {
+          "lib/net9.0/StrawberryShake.Transport.WebSockets.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0/StrawberryShake.Transport.WebSockets.dll": {
             "related": ".xml"
           }
         }
@@ -4424,10 +4442,10 @@
         "postgresql.png"
       ]
     },
-    "StrawberryShake.Core/16.0.0-p.7.51": {
-      "sha512": "+fVsSSB1bATxcqmLRTf3xP2sLUFNYIfa98jIVQ+C32LgURf7DZj6+POgBpeCqJXGEyvEDMzhCR8D+otHIgMWrg==",
+    "StrawberryShake.Core/16.0.0-p.7.63": {
+      "sha512": "zcQpcP0oYvuB7eRCPfyDWIJeNiZIVjHeyw06Rd51kuagmGsrjT3SpKpE7ofb78+DtGm1GprBxhzETqVpGF8PjA==",
       "type": "package",
-      "path": "strawberryshake.core/16.0.0-p.7.51",
+      "path": "strawberryshake.core/16.0.0-p.7.63",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -4441,14 +4459,14 @@
         "lib/net9.0/StrawberryShake.Core.dll",
         "lib/net9.0/StrawberryShake.Core.xml",
         "strawberryshake-signet.png",
-        "strawberryshake.core.16.0.0-p.7.51.nupkg.sha512",
+        "strawberryshake.core.16.0.0-p.7.63.nupkg.sha512",
         "strawberryshake.core.nuspec"
       ]
     },
-    "StrawberryShake.Resources/16.0.0-p.7.51": {
-      "sha512": "u2bx89wxDoMcySIpOxV6nODJDnhYKe78MIjFOHQBMKsbB4jo6+01M1InDJ4VNGgdhVpCa1ynOE7/5W0m5iY2kA==",
+    "StrawberryShake.Resources/16.0.0-p.7.63": {
+      "sha512": "OtAZvyTZi0EGXW1ug4GN7btvPQlemKWTO/TRWCDaGJcTDv/AHT3uI9guP8QPnQxovqkvzz896YF5qcqWdHshHw==",
       "type": "package",
-      "path": "strawberryshake.resources/16.0.0-p.7.51",
+      "path": "strawberryshake.resources/16.0.0-p.7.63",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -4462,8 +4480,29 @@
         "lib/net9.0/StrawberryShake.Resources.dll",
         "lib/net9.0/StrawberryShake.Resources.xml",
         "strawberryshake-signet.png",
-        "strawberryshake.resources.16.0.0-p.7.51.nupkg.sha512",
+        "strawberryshake.resources.16.0.0-p.7.63.nupkg.sha512",
         "strawberryshake.resources.nuspec"
+      ]
+    },
+    "StrawberryShake.Transport.WebSockets/16.0.0-p.7.63": {
+      "sha512": "Gzj381+r5PiQbjqulJIg+IS9P6/jtod7MCzDpvXtYEkUc9TrGC4qHwDiK8RaWC3sw46EVk1YxgmUZqrFz9XD2w==",
+      "type": "package",
+      "path": "strawberryshake.transport.websockets/16.0.0-p.7.63",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "greendonut-signet.png",
+        "hotchocolate-signet.png",
+        "lib/net10.0/StrawberryShake.Transport.WebSockets.dll",
+        "lib/net10.0/StrawberryShake.Transport.WebSockets.xml",
+        "lib/net8.0/StrawberryShake.Transport.WebSockets.dll",
+        "lib/net8.0/StrawberryShake.Transport.WebSockets.xml",
+        "lib/net9.0/StrawberryShake.Transport.WebSockets.dll",
+        "lib/net9.0/StrawberryShake.Transport.WebSockets.xml",
+        "strawberryshake-signet.png",
+        "strawberryshake.transport.websockets.16.0.0-p.7.63.nupkg.sha512",
+        "strawberryshake.transport.websockets.nuspec"
       ]
     },
     "System.CodeDom/6.0.0": {
@@ -4923,7 +4962,8 @@
       "HotChocolate.Types >= 16.0.0-p.7.41",
       "Microsoft.AspNetCore.OpenApi >= 9.0.8",
       "Microsoft.EntityFrameworkCore.Design >= 9.0.8",
-      "Npgsql.EntityFrameworkCore.PostgreSQL >= 9.0.4"
+      "Npgsql.EntityFrameworkCore.PostgreSQL >= 9.0.4",
+      "StrawberryShake.Transport.WebSockets >= 16.0.0-p.7.63"
     ]
   },
   "packageFolders": {
@@ -5013,6 +5053,10 @@
           "Npgsql.EntityFrameworkCore.PostgreSQL": {
             "target": "Package",
             "version": "[9.0.4, )"
+          },
+          "StrawberryShake.Transport.WebSockets": {
+            "target": "Package",
+            "version": "[16.0.0-p.7.63, )"
           }
         },
         "imports": [

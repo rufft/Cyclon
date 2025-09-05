@@ -87,6 +87,10 @@
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
               "version": "[9.0.4, )"
+            },
+            "StrawberryShake.Transport.WebSockets": {
+              "target": "Package",
+              "version": "[16.0.0-p.7.63, )"
             }
           },
           "imports": [
@@ -277,6 +281,10 @@
             "StrawberryShake.Transport.Http": {
               "target": "Package",
               "version": "[16.0.0-p.7.59, )"
+            },
+            "StrawberryShake.Transport.WebSockets": {
+              "target": "Package",
+              "version": "[16.0.0-p.7.63, )"
             }
           },
           "imports": [

@@ -16,7 +16,8 @@
           "HotChocolate.Types": "16.0.0-p.7.41",
           "Microsoft.AspNetCore.OpenApi": "9.0.8",
           "Microsoft.EntityFrameworkCore.Design": "9.0.8",
-          "Npgsql.EntityFrameworkCore.PostgreSQL": "9.0.4"
+          "Npgsql.EntityFrameworkCore.PostgreSQL": "9.0.4",
+          "StrawberryShake.Transport.WebSockets": "16.0.0-p.7.63"
         },
         "runtime": {
           "Batch.dll": {}
@@ -1144,10 +1145,10 @@
           }
         }
       },
-      "StrawberryShake.Core/16.0.0-p.7.51": {
+      "StrawberryShake.Core/16.0.0-p.7.63": {
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.8",
-          "StrawberryShake.Resources": "16.0.0-p.7.51"
+          "StrawberryShake.Resources": "16.0.0-p.7.63"
         },
         "runtime": {
           "lib/net9.0/StrawberryShake.Core.dll": {
@@ -1156,9 +1157,22 @@
           }
         }
       },
-      "StrawberryShake.Resources/16.0.0-p.7.51": {
+      "StrawberryShake.Resources/16.0.0-p.7.63": {
         "runtime": {
           "lib/net9.0/StrawberryShake.Resources.dll": {
+            "assemblyVersion": "16.0.0.0",
+            "fileVersion": "16.0.0.0"
+          }
+        }
+      },
+      "StrawberryShake.Transport.WebSockets/16.0.0-p.7.63": {
+        "dependencies": {
+          "Microsoft.Extensions.Options": "9.0.8",
+          "StrawberryShake.Core": "16.0.0-p.7.63",
+          "StrawberryShake.Resources": "16.0.0-p.7.63"
+        },
+        "runtime": {
+          "lib/net9.0/StrawberryShake.Transport.WebSockets.dll": {
             "assemblyVersion": "16.0.0.0",
             "fileVersion": "16.0.0.0"
           }
@@ -1267,7 +1281,7 @@
           "HotChocolate.Execution.Configuration.Abstractions": "16.0.0-p.7.41",
           "HotChocolate.Types.Abstractions": "16.0.0-p.7.51",
           "Microsoft.EntityFrameworkCore": "9.0.8",
-          "StrawberryShake.Core": "16.0.0-p.7.51"
+          "StrawberryShake.Core": "16.0.0-p.7.63"
         },
         "runtime": {
           "Cyclone.Common.dll": {
@@ -1837,19 +1851,26 @@
       "path": "npgsql.entityframeworkcore.postgresql/9.0.4",
       "hashPath": "npgsql.entityframeworkcore.postgresql.9.0.4.nupkg.sha512"
     },
-    "StrawberryShake.Core/16.0.0-p.7.51": {
+    "StrawberryShake.Core/16.0.0-p.7.63": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-+fVsSSB1bATxcqmLRTf3xP2sLUFNYIfa98jIVQ+C32LgURf7DZj6+POgBpeCqJXGEyvEDMzhCR8D+otHIgMWrg==",
-      "path": "strawberryshake.core/16.0.0-p.7.51",
-      "hashPath": "strawberryshake.core.16.0.0-p.7.51.nupkg.sha512"
+      "sha512": "sha512-zcQpcP0oYvuB7eRCPfyDWIJeNiZIVjHeyw06Rd51kuagmGsrjT3SpKpE7ofb78+DtGm1GprBxhzETqVpGF8PjA==",
+      "path": "strawberryshake.core/16.0.0-p.7.63",
+      "hashPath": "strawberryshake.core.16.0.0-p.7.63.nupkg.sha512"
     },
-    "StrawberryShake.Resources/16.0.0-p.7.51": {
+    "StrawberryShake.Resources/16.0.0-p.7.63": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-u2bx89wxDoMcySIpOxV6nODJDnhYKe78MIjFOHQBMKsbB4jo6+01M1InDJ4VNGgdhVpCa1ynOE7/5W0m5iY2kA==",
-      "path": "strawberryshake.resources/16.0.0-p.7.51",
-      "hashPath": "strawberryshake.resources.16.0.0-p.7.51.nupkg.sha512"
+      "sha512": "sha512-OtAZvyTZi0EGXW1ug4GN7btvPQlemKWTO/TRWCDaGJcTDv/AHT3uI9guP8QPnQxovqkvzz896YF5qcqWdHshHw==",
+      "path": "strawberryshake.resources/16.0.0-p.7.63",
+      "hashPath": "strawberryshake.resources.16.0.0-p.7.63.nupkg.sha512"
+    },
+    "StrawberryShake.Transport.WebSockets/16.0.0-p.7.63": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Gzj381+r5PiQbjqulJIg+IS9P6/jtod7MCzDpvXtYEkUc9TrGC4qHwDiK8RaWC3sw46EVk1YxgmUZqrFz9XD2w==",
+      "path": "strawberryshake.transport.websockets/16.0.0-p.7.63",
+      "hashPath": "strawberryshake.transport.websockets.16.0.0-p.7.63.nupkg.sha512"
     },
     "System.CodeDom/6.0.0": {
       "type": "package",

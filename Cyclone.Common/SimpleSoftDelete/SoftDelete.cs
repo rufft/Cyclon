@@ -21,7 +21,7 @@ public class NavigationPolicy
 
 public static class SoftDeletePolicyRegistry
 {
-    private static readonly ConcurrentDictionary<Type, List<NavigationPolicy>> _policies = new();
+    private static readonly ConcurrentDictionary<Type, List<NavigationPolicy>> Policies = new();
 
     public static void RegisterCollection<TParent, TChild>(
         Expression<Func<TParent, IEnumerable<TChild>>> navigationSelector,
@@ -31,7 +31,7 @@ public static class SoftDeletePolicyRegistry
         var pred = childPredicate?.Compile();
         Func<object, bool>? wrap = pred == null ? null : obj => pred((TChild)obj);
         var policy = new NavigationPolicy(name, typeof(TChild), isCollection: true, predicate: wrap);
-        var list = _policies.GetOrAdd(typeof(TParent), _ => []);
+        var list = Policies.GetOrAdd(typeof(TParent), _ => []);
         list.Add(policy);
     }
 
@@ -44,19 +44,21 @@ public static class SoftDeletePolicyRegistry
         var pred = childPredicate?.Compile();
         Func<object, bool>? wrap = pred == null ? null : obj => pred((TChild)obj);
         var policy = new NavigationPolicy(name, typeof(TChild), isCollection: false, predicate: wrap);
-        var list = _policies.GetOrAdd(typeof(TParent), _ => []);
+        var list = Policies.GetOrAdd(typeof(TParent), _ => []);
         list.Add(policy);
     }
 
     public static IReadOnlyList<NavigationPolicy> GetPoliciesFor(Type parentType) =>
-        _policies.TryGetValue(parentType, out var list) ? list : Array.Empty<NavigationPolicy>();
+        Policies.TryGetValue(parentType, out var list) ? list : Array.Empty<NavigationPolicy>();
 
     private static string GetMemberName(LambdaExpression lambda)
     {
         return lambda.Body switch
         {
+            // ожидаем MemberExpression: p => p.SomeNav
             MemberExpression me => me.Member.Name,
                 
+            // возможно: UnaryExpression (например при конверсиях)
             UnaryExpression { Operand: MemberExpression me2 } => me2.Member.Name,
             _ => throw new ArgumentException(
                 "Нельзя получить имя навигации из выражения. Используйте простой селектор: x => x.NavProperty")

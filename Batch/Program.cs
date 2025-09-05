@@ -6,6 +6,7 @@ using Batch.Models.Displays;
 using Cyclone.Common.SimpleService;
 using Cyclone.Common.SimpleSoftDelete;
 using Cyclone.Common.SimpleSoftDelete.Abstractions;
+using Cyclone.Common.SimpleSoftDelete.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,28 +25,18 @@ builder.Services.AddSimpleServices();
 builder.Services.AddScoped<Query>();
 builder.Services.AddScoped<Mutation>();
 
-SoftDeletePolicyRegistry.RegisterCollection<Batch.Models.Batch, Display>(b => b.Displays);
-SoftDeletePolicyRegistry.RegisterCollection<DisplayType, Batch.Models.Batch>(dt => dt.Batches);
-
 builder.Services
     .AddGraphQLServer()
     .AddQueryType<Query>()
     .AddMutationType<Mutation>()
     .AddProjections()
     .AddFiltering()
-    .AddSorting()
-    .AddSubscriptionType<DeletionSubscription>()
+    .AddSorting() 
     .AddInMemorySubscriptions()
     .ModifyRequestOptions(opts =>
     {
         opts.IncludeExceptionDetails = builder.Environment.IsDevelopment();
     });
-
-builder.Services.AddScoped<IDeletionEventPublisher, HcDeletionEventPublisher>();
-builder.Services.AddScoped<SoftDeletePublishInterceptor>(sp =>
-    new SoftDeletePublishInterceptor(
-        sp.GetRequiredService<IDeletionEventPublisher>(),
-        originService: "Batch"));
 
 
 builder.Services.AddCors(options =>
@@ -56,6 +47,13 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
+});
+
+builder.Services.AddDeletionPublisher();
+builder.Services.AddSoftDeleteEventSystem(() =>
+{
+    SoftDeletePolicyRegistry.RegisterCollection<Batch.Models.Batch, Display>(b => b.Displays);
+    SoftDeletePolicyRegistry.RegisterCollection<DisplayType, Batch.Models.Batch>(dt => dt.Batches);
 });
 
 builder.Services.AddControllers().AddJsonOptions(opts =>
