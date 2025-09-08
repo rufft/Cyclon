@@ -1,7 +1,5 @@
-﻿using System.Reflection;
-using Cyclone.Common.SimpleDatabase;
+﻿using Cyclone.Common.SimpleDatabase;
 using Cyclone.Common.SimpleEntity;
-using Cyclone.Common.SimpleSoftDelete.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
@@ -99,11 +97,6 @@ public static class DbSetSoftDeleteExtensions
             {
                 var cnt = await SoftDeleteRecursiveInternalAsync(db, rootEntity, deletedBy, [], cancellationToken);
                 await db.SaveChangesAsync(cancellationToken);
-                if (cnt <= 0) return cnt;
-                var publisher = db.GetService<IDeletionEventPublisher>();
-                var originService = Assembly.GetEntryAssembly()!.GetName().Name!;
-                await publisher.PublishAsync<T>(rootEntity.Id, originService, deletedBy, cascade: true, ct: cancellationToken);
-
                 return cnt;
             }
         });

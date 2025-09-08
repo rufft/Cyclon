@@ -1,10 +1,7 @@
 using System.Text.Json.Serialization;
 using Cyclone.Common.SimpleService;
-using Cyclone.Common.SimpleSoftDelete;
 using Cyclone.Common.SimpleSoftDelete.Extensions;
 using Measurement.Context;
-using Measurement.GraphQL;
-using Measurement.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Query = Measurement.GraphQL.Query;
 
@@ -18,7 +15,6 @@ builder.Services.AddDbContext<MeasureDbContext>((sp, options) =>
 {
     options.UseNpgsql(connectionString, b =>
         b.MigrationsAssembly(typeof(MeasureDbContext).Assembly.FullName));
-    options.AddInterceptors(sp.GetRequiredService<SoftDeletePublishInterceptor>());
 });
 
 builder.Services.AddSimpleServices();
@@ -30,11 +26,25 @@ builder.Services
     .AddProjections()
     .AddFiltering()
     .AddSorting()
-    .AddInMemorySubscriptions()
+    .AddDeletionSubscriptions()
     .ModifyRequestOptions(opts =>
     {
         opts.IncludeExceptionDetails = builder.Environment.IsDevelopment();
     });
+
+builder.Services.AddSoftDeleteEventSystem(() =>
+{
+}, originServiceName: "Measurement");
+
+builder.Services.AddSubscription("OnDisplayDelete", async (ev, sp, ct) =>
+{
+    var dbFactory = sp.GetRequiredService<IDbContextFactory<MeasureDbContext>>();
+    await using var db = await dbFactory.CreateDbContextAsync(ct);
+    
+    await db.CieMeasures
+        .Where(m => m.DisplayId == ev.EntityId && !m.IsDeleted)
+        .ExecuteUpdateAsync(s => s.SetProperty(x => x.IsDeleted, true), ct);
+});
 
 builder.Services.AddCors(options =>
 {
@@ -43,11 +53,6 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader()
             .AllowAnyMethod());
 });
-
-builder.Services.AddDeletionPublisher();
-builder.Services.AddSoftDeleteEventSystem();
-
-builder.Services.AddSubscription("OnDisplayDelete", MeasurementDeletionHandlers.OnDisplayDeleteHandler);
 
 builder.Services.AddControllers().AddJsonOptions(opts =>
 {

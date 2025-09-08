@@ -14,8 +14,4 @@
       <PackageReference Include="StrawberryShake.Core" Version="16.0.0-p.7.51" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="SimpleSoftDelete\Logger\" />
-    </ItemGroup>
-
 </Project>

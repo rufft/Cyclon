@@ -1,45 +1,88 @@
-﻿using Cyclone.Common.SimpleSoftDelete.Abstractions;
+﻿using System.Collections.Concurrent;
+using Cyclone.Common.SimpleDatabase;
+using Cyclone.Common.SimpleSoftDelete.Abstractions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Cyclone.Common.SimpleSoftDelete;
 
-public sealed class SoftDeletePublishInterceptor(IDeletionEventPublisher publisher,
-    string originService) : SaveChangesInterceptor
+public sealed class SoftDeletePublishInterceptor(
+    IDeletionEventPublisher publisher,
+    string originService
+) : SaveChangesInterceptor
 {
+    private const string SoftDeletedKey = "__SoftDeletedEntities";
+    
     public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(
-        DbContextEventData eventData, InterceptionResult<int> result, CancellationToken ct = default)
+        DbContextEventData eventData,
+        InterceptionResult<int> result,
+        CancellationToken cancellationToken = default)
     {
         var ctx = eventData.Context;
-        if (ctx is null) return await base.SavingChangesAsync(eventData, result, ct);
+        if (ctx is null) return await base.SavingChangesAsync(eventData, result, cancellationToken);
 
-        var toPublish = ctx.ChangeTracker.Entries()
+        var softDeleted = ctx.ChangeTracker.Entries()
             .Where(e => e.State is EntityState.Modified
-                        && e.Properties.Any(p => p.Metadata.Name == "IsDeleted"
-                                                 && p is { OriginalValue: false, CurrentValue: true }))
-            .Select(e => new { e.Entity, Type = e.Entity.GetType(), Id = GetId(e) })
-            .Where(x => x.Id != Guid.Empty)
+                        && HasBool(e, "IsDeleted")
+                        && !GetOriginalBool(e, "IsDeleted")
+                        && GetCurrentBool(e, "IsDeleted"))
+            .Select(e => new EntityInfo(e.Entity.GetType() ,GetGuid(e, "Id")))
+            .Where(t => t.EntityId != Guid.Empty)
             .ToList();
 
-        var res = await base.SavingChangesAsync(eventData, result, ct);
+        TempStore.Set(ctx, SoftDeletedKey, softDeleted);
 
-        foreach (var x in toPublish)
+        return await base.SavingChangesAsync(eventData, result, cancellationToken);
+    }
+
+    public override async ValueTask<int> SavedChangesAsync(
+        SaveChangesCompletedEventData eventData, int result, CancellationToken cancellationToken = default)
+    {
+        var ctx = eventData.Context;
+        if (ctx is null) return await base.SavedChangesAsync(eventData, result, cancellationToken);
+        try
         {
-            await publisher.PublishAsync(
-                new DeletionEvent(
-                    EntityType: x.Type.Name,
-                    EntityId: x.Id,
-                    OriginService: originService,
-                    Reason: "SoftDelete",
-                    CorrelationId: Guid.NewGuid().ToString("N"),
-                    OccurredAt: DateTime.Now,
-                    Cascade: true),
-                ct);
+            if (result > 0 &&
+                TempStore.TryGet<List<EntityInfo>>(ctx,nameof(SoftDeletePublishInterceptor), out var listObj) == true &&
+                listObj is { Count: > 0 })
+            {
+                foreach (var entityInfo in listObj)
+                {
+                    var method = typeof(IDeletionEventPublisher).GetMethod(nameof(IDeletionEventPublisher.PublishAsync), 4, [])!;
+                    var gen = typeof(IDeletionEventPublisher).GetMethods()
+                        .First(m => m is { IsGenericMethod: true, Name: nameof(IDeletionEventPublisher.PublishAsync) } &&
+                                    m.GetGenericArguments().Length == 1 &&
+                                    m.GetParameters().Length >= 2)
+                        .MakeGenericMethod(entityInfo.EntityType);
+                    var task = (Task)gen.Invoke(publisher, [entityInfo.EntityId, originService, "SoftDelete", true, null, cancellationToken
+                    ])!;
+                    await task.ConfigureAwait(false);
+                }
+            }
+        }
+        finally
+        {
+            TempStore.Remove(ctx, SoftDeletedKey);
         }
 
-        return res;
+        return await base.SavedChangesAsync(eventData, result, cancellationToken);
+    }
 
-        static Guid GetId(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry e)
-            => e.Property("Id").CurrentValue is Guid g ? g : Guid.Empty;
+    private static bool HasBool(EntityEntry e, string name) =>
+        e.Metadata.FindProperty(name)?.ClrType == typeof(bool);
+    private static bool GetOriginalBool(EntityEntry e, string name) =>
+        (bool)(e.Property(name).OriginalValue ?? false);
+    private static bool GetCurrentBool(EntityEntry e, string name) =>
+        (bool)(e.Property(name).CurrentValue ?? false);
+
+    private static Guid GetGuid(EntityEntry e, string name)
+    {
+        var p = e.Metadata.FindProperty(name);
+        if (p?.ClrType != typeof(Guid)) return Guid.Empty;
+        var v = e.Property(name).CurrentValue;
+        return v is Guid g ? g : Guid.Empty;
     }
 }
+
+public record EntityInfo(Type EntityType, Guid EntityId);

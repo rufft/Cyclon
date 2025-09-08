@@ -6,6 +6,5 @@ public sealed record DeletionEvent(
     string OriginService,
     string? Reason,
     string CorrelationId,
-    DateTime OccurredAt,
-    bool Cascade  
-);
+    DateTime OccurredA,
+    bool Cascade);

@@ -2,8 +2,8 @@
 
 public interface IDeletionEventPublisher
 {
-    ValueTask PublishAsync(DeletionEvent ev, CancellationToken ct = default);
-    ValueTask PublishAsync<T>(Guid id, string originService,
+    Task PublishAsync(DeletionEvent ev, CancellationToken ct = default);
+    Task PublishAsync<T>(Guid id, string originService,
         string? reason = null, bool cascade = true,
         string? correlationId = null, CancellationToken ct = default);
 }

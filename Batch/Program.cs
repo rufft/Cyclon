@@ -5,7 +5,6 @@ using Batch.GraphQL;
 using Batch.Models.Displays;
 using Cyclone.Common.SimpleService;
 using Cyclone.Common.SimpleSoftDelete;
-using Cyclone.Common.SimpleSoftDelete.Abstractions;
 using Cyclone.Common.SimpleSoftDelete.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +18,7 @@ builder.Services.AddDbContext<BatchDbContext>((sp, options) =>
     options.UseNpgsql(connectionString, b =>
         b.MigrationsAssembly(typeof(BatchDbContext).Assembly.FullName));
     options.AddInterceptors(sp.GetRequiredService<SoftDeletePublishInterceptor>());
+
 });
 builder.Services.AddSimpleServices();
 builder.Services.AddScoped<Query>();
@@ -30,13 +30,18 @@ builder.Services
     .AddMutationType<Mutation>()
     .AddProjections()
     .AddFiltering()
-    .AddSorting() 
-    .AddInMemorySubscriptions()
+    .AddSorting()
+    .AddDeletionSubscriptions()
     .ModifyRequestOptions(opts =>
     {
         opts.IncludeExceptionDetails = builder.Environment.IsDevelopment();
     });
 
+builder.Services.AddSoftDeleteEventSystem(() =>
+{
+    SoftDeletePolicyRegistry.RegisterCollection<Batch.Models.Batch, Display>(b => b.Displays);
+    SoftDeletePolicyRegistry.RegisterCollection<DisplayType, Batch.Models.Batch>(dt => dt.Batches);
+});
 
 builder.Services.AddCors(options =>
 {
@@ -48,12 +53,6 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddDeletionPublisher();
-builder.Services.AddSoftDeleteEventSystem(() =>
-{
-    SoftDeletePolicyRegistry.RegisterCollection<Batch.Models.Batch, Display>(b => b.Displays);
-    SoftDeletePolicyRegistry.RegisterCollection<DisplayType, Batch.Models.Batch>(dt => dt.Batches);
-});
 
 builder.Services.AddControllers().AddJsonOptions(opts =>
 {
