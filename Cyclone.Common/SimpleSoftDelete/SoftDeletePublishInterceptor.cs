@@ -4,11 +4,11 @@ using Cyclone.Common.SimpleSoftDelete.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Cyclone.Common.SimpleSoftDelete;
 
 public sealed class SoftDeletePublishInterceptor(
-    IDeletionEventPublisher publisher,
     string originService
 ) : SaveChangesInterceptor
 {
@@ -47,6 +47,8 @@ public sealed class SoftDeletePublishInterceptor(
                 TempStore.TryGet<List<EntityInfo>>(ctx,nameof(SoftDeletePublishInterceptor), out var listObj) == true &&
                 listObj is { Count: > 0 })
             {
+                var publisher = ctx.GetService<IDeletionEventPublisher>();
+
                 foreach (var entityInfo in listObj)
                 {
                     var method = typeof(IDeletionEventPublisher).GetMethod(nameof(IDeletionEventPublisher.PublishAsync), 4, [])!;

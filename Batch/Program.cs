@@ -36,13 +36,13 @@ builder.Services.AddSoftDeleteEventSystem(() =>
     SoftDeletePolicyRegistry.RegisterCollection<DisplayType, Batch.Models.Batch>(dt => dt.Batches);
 }, originServiceName: "Batch");
 
-builder.Services.AddDbContext<BatchDbContext>((sp, options) =>
+builder.Services.AddDbContextFactory<BatchDbContext>((sp, options) =>
 {
     options.UseNpgsql(connectionString, b =>
         b.MigrationsAssembly(typeof(BatchDbContext).Assembly.FullName));
-    options.AddInterceptors(sp.GetRequiredService<SoftDeletePublishInterceptor>());
-
+    options.AddInterceptors(new SoftDeletePublishInterceptor("Batch"));
 });
+
 
 builder.Services.AddCors(options =>
 {

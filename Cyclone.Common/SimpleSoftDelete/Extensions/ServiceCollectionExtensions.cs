@@ -25,7 +25,7 @@ public static class ServiceCollectionExtensions
 
         var origin = originServiceName ?? Assembly.GetEntryAssembly()!.GetName().Name!;
         services.TryAddScoped(sp => new SoftDeletePublishInterceptor(
-            sp.GetRequiredService<IDeletionEventPublisher>(), origin));
+            origin));
 
         return services;
     }

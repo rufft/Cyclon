@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Cyclone.Common.SimpleService;
+using Cyclone.Common.SimpleSoftDelete;
 using Cyclone.Common.SimpleSoftDelete.Extensions;
 using Measurement.Context;
 using Microsoft.EntityFrameworkCore;
@@ -30,17 +31,17 @@ builder.Services.AddSoftDeleteEventSystem(() =>
 {
 }, originServiceName: "Measurement");
 
-builder.Services.AddDbContext<MeasureDbContext>((sp, options) =>
+builder.Services.AddDbContextFactory<MeasureDbContext>(options =>
 {
     options.UseNpgsql(connectionString, b =>
         b.MigrationsAssembly(typeof(MeasureDbContext).Assembly.FullName));
+    options.AddInterceptors(new SoftDeletePublishInterceptor("Measurement"));
 });
 
 builder.Services.AddSubscription("OnDisplayDelete", async (ev, sp, ct) =>
 {
-    var db = await sp.GetRequiredService<IDbContextFactory<MeasureDbContext>>()
-        .CreateDbContextAsync(ct);
-
+    using var scope = sp.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<MeasureDbContext>();
     await db.CieMeasures
         .Where(m => m.DisplayId == ev.EntityId && !m.IsDeleted)
         .ExecuteUpdateAsync(s => s.SetProperty(x => x.IsDeleted, true), ct);

@@ -7,7 +7,7 @@ namespace Measurement.Services;
 
 public class CieMeasureService(MeasureDbContext db) : SimpleService<CieMeasure, MeasureDbContext>(db)
 {
-    // public async Task<Cyclone.Common.SimpleResponse.Response<CieMeasure>> CreateAsync(CreateCieMeasureDto dto)
+    // public async Task<Response<CieMeasure>> CreateAsync(CreateCieMeasureDto dto)
     // {
     //     if (dto.CieX is null or < 0 and > 1)
     //         return "Cie x должен быть от 0 до 1";

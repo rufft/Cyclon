@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Batch")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a8833c5fcbe693af9a8057166555108726f9adc3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8f834f5719b09eaeb92e1f4ff0b11935a7d61dbf")]
 [assembly: System.Reflection.AssemblyProductAttribute("Batch")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Batch")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
