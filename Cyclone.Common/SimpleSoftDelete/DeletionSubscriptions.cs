@@ -1,72 +1,84 @@
 ﻿using System.Collections.Concurrent;
+using Cyclone.Common.SimpleSoftDelete.Extensions;
 using HotChocolate.Subscriptions;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 
 namespace Cyclone.Common.SimpleSoftDelete
 {
     public delegate Task DeletionEventHandler(DeletionEvent ev, IServiceProvider services, CancellationToken ct);
 
-public interface IDeletionSubscriptionRegistry
-{
-    void SubscribeTopic(string topic, DeletionEventHandler handler);
-    void Subscribe(string subscriptionName, DeletionEventHandler handler);
-    IReadOnlyDictionary<string, List<DeletionEventHandler>> GetAll();
-}
-
-internal sealed class DeletionSubscriptionRegistry : IDeletionSubscriptionRegistry
-{
-    private readonly ConcurrentDictionary<string, List<DeletionEventHandler>> _map = new(StringComparer.Ordinal);
-
-    public void SubscribeTopic(string topic, DeletionEventHandler handler)
+    public interface IDeletionSubscriptionRegistry
     {
-        var list = _map.GetOrAdd(topic, _ => []);
-        lock (list) list.Add(handler);
+        void SubscribeTopic(string topic, DeletionEventHandler handler);
+        void Subscribe(string subscriptionName, DeletionEventHandler handler);
+        IReadOnlyDictionary<string, List<DeletionEventHandler>> GetAll();
     }
 
-    public void Subscribe(string subscriptionName, DeletionEventHandler handler)
+    internal sealed class DeletionSubscriptionRegistry : IDeletionSubscriptionRegistry
     {
-        var topic = subscriptionName switch
+        private readonly ConcurrentDictionary<string, List<DeletionEventHandler>> _map = new(StringComparer.Ordinal);
+
+        public void SubscribeTopic(string topic, DeletionEventHandler handler)
         {
-            "OnDisplayDelete"     => DeletionTopics.For("Display"),
-            "OnDisplayTypeDelete" => DeletionTopics.For("DisplayType"),
-            _ => subscriptionName // если уже полный топик
-        };
-        SubscribeTopic(topic, handler);
-    }
-
-    public IReadOnlyDictionary<string, List<DeletionEventHandler>> GetAll() => _map!;
-}
-
-public sealed class DeletionListenerHostedService(
-    ITopicEventReceiver receiver,
-    IDeletionSubscriptionRegistry registry,
-    IServiceProvider services) : BackgroundService
-{
-    protected override Task ExecuteAsync(CancellationToken stoppingToken)
-    {
-        var all = registry.GetAll();
-
-        foreach (var (topic, handlers) in all)
-        {
-            _ = Task.Run(async () =>
-            {
-                var stream = await receiver.SubscribeAsync<DeletionEvent>(topic, stoppingToken);
-                await foreach (var ev in stream.ReadEventsAsync().WithCancellation(stoppingToken))
-                {
-                    foreach (var h in handlers)
-                    {
-                        try { await h(ev, services, stoppingToken); }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine($"[DeletionListener] error on {topic}: {ex}");
-                        }
-                    }
-                }
-            }, stoppingToken);
+            var list = _map.GetOrAdd(topic, _ => []);
+            lock (list) list.Add(handler);
         }
 
-        return Task.CompletedTask;
+        public void Subscribe(string subscriptionName, DeletionEventHandler handler)
+        {
+            var topic = subscriptionName switch
+            {
+                "OnDisplayDelete" => DeletionTopics.For("Display"),
+                "OnDisplayTypeDelete" => DeletionTopics.For("DisplayType"),
+                _ => subscriptionName // если уже полный топик
+            };
+            SubscribeTopic(topic, handler);
+        }
+
+        public IReadOnlyDictionary<string, List<DeletionEventHandler>> GetAll() => _map!;
     }
-}
+
+    public sealed class DeletionListenerHostedService(
+        ITopicEventReceiver receiver,
+        IDeletionSubscriptionRegistry registry,
+        IOptions<DeletionSubscriptionOptions> opts,
+        IServiceProvider services) : BackgroundService
+    {
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            foreach (var (nameOrTopic, handler) in opts.Value.Items)
+            {
+                registry.Subscribe(nameOrTopic, handler);
+            }
+
+            var all = registry.GetAll();
+
+            foreach (var (topic, handlers) in all)
+            {
+                _ = Task.Run(async () =>
+                {
+                    var stream = await receiver.SubscribeAsync<DeletionEvent>(topic, stoppingToken);
+
+                    await foreach (var ev in stream.ReadEventsAsync().WithCancellation(stoppingToken))
+                    {
+                        foreach (var h in handlers)
+                        {
+                            try
+                            {
+                                await h(ev, services, stoppingToken);
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"[DeletionListener] handler error for {topic}: {ex}");
+                            }
+                        }
+                    }
+                }, stoppingToken);
+            }
+
+            return Task.CompletedTask;
+        }
+    }
 }
 

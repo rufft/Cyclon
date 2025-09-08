@@ -11,12 +11,6 @@ var configuration = builder.Configuration;
 
 var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-builder.Services.AddDbContext<MeasureDbContext>((sp, options) =>
-{
-    options.UseNpgsql(connectionString, b =>
-        b.MigrationsAssembly(typeof(MeasureDbContext).Assembly.FullName));
-});
-
 builder.Services.AddSimpleServices();
 
 builder.Services
@@ -36,15 +30,22 @@ builder.Services.AddSoftDeleteEventSystem(() =>
 {
 }, originServiceName: "Measurement");
 
+builder.Services.AddDbContext<MeasureDbContext>((sp, options) =>
+{
+    options.UseNpgsql(connectionString, b =>
+        b.MigrationsAssembly(typeof(MeasureDbContext).Assembly.FullName));
+});
+
 builder.Services.AddSubscription("OnDisplayDelete", async (ev, sp, ct) =>
 {
-    var dbFactory = sp.GetRequiredService<IDbContextFactory<MeasureDbContext>>();
-    await using var db = await dbFactory.CreateDbContextAsync(ct);
-    
+    var db = await sp.GetRequiredService<IDbContextFactory<MeasureDbContext>>()
+        .CreateDbContextAsync(ct);
+
     await db.CieMeasures
         .Where(m => m.DisplayId == ev.EntityId && !m.IsDeleted)
         .ExecuteUpdateAsync(s => s.SetProperty(x => x.IsDeleted, true), ct);
 });
+
 
 builder.Services.AddCors(options =>
 {
