@@ -17,10 +17,12 @@ public static class ServiceCollectionExtensions
         Action<ModelBuilder>? modelCustomization = null)
         where TContext : SimpleDbContext
     {
-        services.AddDbContext<TContext>((serviceProvider, options) =>
+        services.AddScoped<UpdateTimestampInterceptor>();
+
+        services.AddDbContext<TContext>((sp, options) =>
         {
+            options.AddInterceptors(sp.GetRequiredService<UpdateTimestampInterceptor>());
             optionsAction(options);
-            // можно подключить логирование и пр. через serviceProvider
         });
 
         var assemblies = entityAssemblies ?? [];

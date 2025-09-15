@@ -6,7 +6,6 @@ namespace Batch.Models;
 
 public class Batch : BaseEntity
 {
-    
     private Batch() { }
     
     public Batch(int number,

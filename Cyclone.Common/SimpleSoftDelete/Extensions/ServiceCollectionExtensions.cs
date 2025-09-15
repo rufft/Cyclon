@@ -1,49 +1,62 @@
 ﻿using System.Collections.ObjectModel;
 using System.Reflection;
 using Cyclone.Common.SimpleSoftDelete.Abstractions;
+using Cyclone.Common.SimpleSoftDelete.RabbitMQ;
 using HotChocolate.Execution.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using RabbitMQ.Client;
 
 namespace Cyclone.Common.SimpleSoftDelete.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddDeletionPublisher(this IServiceCollection services)
-    {
-        services.TryAddScoped<IDeletionEventPublisher, HcDeletionEventPublisher>();
-        return services;
-    }
-
-    public static IServiceCollection AddSoftDeleteEventSystem(
+    public static IServiceCollection AddRabbitMqSoftDelete(
         this IServiceCollection services,
-        Action configurePolicies,
-        string? originServiceName = null)
+        Action<RabbitMqOptions>? configure = null)
     {
-        configurePolicies();
+        if (configure != null) services.Configure(configure);
+        else services.Configure<RabbitMqOptions>(_ => { });
+        
+        services.TryAddSingleton<ConnectionFactory>(sp =>
+        {
+            var opt = sp.GetRequiredService<IOptions<RabbitMqOptions>>().Value;
+            return new ConnectionFactory
+            {
+                HostName = opt.Host,
+                Port = opt.Port,
+                UserName = opt.User,
+                Password = opt.Password,
+                AutomaticRecoveryEnabled = true,
+                NetworkRecoveryInterval = TimeSpan.FromSeconds(5),
+                TopologyRecoveryEnabled = true
+            };
+        });
 
-        var origin = originServiceName ?? Assembly.GetEntryAssembly()!.GetName().Name!;
-        services.TryAddScoped(sp => new SoftDeletePublishInterceptor(
-            origin));
+        services.TryAddSingleton<IRabbitConnectionManager, RabbitConnectionManager>();
+
+        // Паблишер (singleton)
+        services.TryAddSingleton<IDeletionEventPublisher, RabbitMqDeletionEventPublisher>();
+
+        // Регистрируем реестр подписок и hosted-listener
+        services.TryAddSingleton<IDeletionSubscriptionRegistry, DeletionSubscriptionRegistry>();
+        services.TryAddEnumerable(ServiceDescriptor.Singleton<IHostedService, RabbitMqDeletionListenerHostedService>());
 
         return services;
     }
 
-    public static IRequestExecutorBuilder AddDeletionSubscriptions(this IRequestExecutorBuilder builder)
-        => builder.AddInMemorySubscriptions();
-
-    public static IServiceCollection AddSubscription(
+    /// <summary>
+    /// Упрощённая регистрация подписки (аналог вашей AddSubscription, но без HotChocolate).
+    /// </summary>
+    public static IServiceCollection AddDeletionSubscription(
         this IServiceCollection services,
         string subscriptionNameOrTopic,
         DeletionEventHandler handler)
     {
-        services.TryAddSingleton<IDeletionSubscriptionRegistry, DeletionSubscriptionRegistry>();
-        services.TryAddEnumerable(ServiceDescriptor.Singleton<IHostedService, DeletionListenerHostedService>());
-
         services.AddOptions<DeletionSubscriptionOptions>()
             .PostConfigure(o => o.Handlers.Add((subscriptionNameOrTopic, handler)));
-
         return services;
     }
 }

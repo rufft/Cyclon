@@ -6,7 +6,7 @@ public class Response<T>
     public bool Failure { get; private init; }
     public T? Data { get; private init; }
     public string? Message { get; private init; }
-    public List<string> Errors { get; init; } = [];
+    public List<string> Errors { get; private init; } = [];
 
     public static Response<T> Ok(T data, string? message = null) =>
         new() { Success = true, Failure = false, Data = data, Message = message };

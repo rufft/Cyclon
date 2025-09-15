@@ -232,14 +232,14 @@ public static class DbSetSoftDeleteExtensions
             if (useTransaction)
             {
                 await using var tx = await db.Database.BeginTransactionAsync(cancellationToken);
-                var cnt = await RestoreRecursiveInternalAsync(db, rootEntity, restoredBy, new HashSet<Guid>(), cancellationToken);
+                var cnt = await RestoreRecursiveInternalAsync(db, rootEntity, restoredBy, [], cancellationToken);
                 await db.SaveChangesAsync(cancellationToken);
                 await tx.CommitAsync(cancellationToken);
                 return cnt;
             }
             else
             {
-                var cnt = await RestoreRecursiveInternalAsync(db, rootEntity, restoredBy, new HashSet<Guid>(), cancellationToken);
+                var cnt = await RestoreRecursiveInternalAsync(db, rootEntity, restoredBy, [], cancellationToken);
                 await db.SaveChangesAsync(cancellationToken);
                 return cnt;
             }

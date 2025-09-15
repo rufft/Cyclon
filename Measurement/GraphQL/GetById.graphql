@@ -1,5 +1,0 @@
-﻿query TryGetDisplayById($id: UUID!) {
-    displayById(id: $id) {
-        id
-    }
-}

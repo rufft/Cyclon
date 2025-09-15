@@ -31,6 +31,7 @@ public class SimpleService<TEntity, TDbContext>(TDbContext db)
     {
         try
         {
+            Db.Set<TEntity>().Update(entity);
             await Db.SaveChangesAsync();
             return entity;
         }
@@ -62,6 +63,8 @@ public class SimpleService<TEntity, TDbContext>(TDbContext db)
     
     protected async Task<Response<int>> RestoreAsync(TEntity entity)
     {
+        if (!entity.IsDeleted) return $"Сущность с id--{ entity.Id } не удалена";
+        
         var strategy = Db.Database.CreateExecutionStrategy();
         
         return await strategy.ExecuteAsync(async () =>

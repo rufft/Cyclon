@@ -20,12 +20,12 @@ public class CieMeasure : Measure
     }
     
     public Cie Cie { get; init; }
-    public double Lv { get; init; }
+    public double Lv { get; set; }
 }
 
 [Owned]
 public class Cie(double x, double y)
 {
-    public double X { get; init; } = x;
-    public double Y { get; init; } = y;
+    public double X { get; set; } = x;
+    public double Y { get; set; } = y;
 }

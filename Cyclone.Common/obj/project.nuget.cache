@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "3uerxj+Wf64=",
+  "dgSpecHash": "XNLm8+3pQjI=",
   "success": true,
   "projectFilePath": "C:\\Users\\Chuwi\\RiderProjects\\Cyclon\\Cyclone.Common\\Cyclone.Common.csproj",
   "expectedPackageFiles": [
@@ -52,7 +52,7 @@
     "C:\\Users\\Chuwi\\.nuget\\packages\\hotchocolate.utilities.tasks\\16.0.0-p.7.32\\hotchocolate.utilities.tasks.16.0.0-p.7.32.nupkg.sha512",
     "C:\\Users\\Chuwi\\.nuget\\packages\\hotchocolate.validation\\16.0.0-p.7.32\\hotchocolate.validation.16.0.0-p.7.32.nupkg.sha512",
     "C:\\Users\\Chuwi\\.nuget\\packages\\microsoft.entityframeworkcore\\9.0.8\\microsoft.entityframeworkcore.9.0.8.nupkg.sha512",
-    "C:\\Users\\Chuwi\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\9.0.8\\microsoft.entityframeworkcore.abstractions.9.0.8.nupkg.sha512",
+    "C:\\Users\\Chuwi\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\9.0.9\\microsoft.entityframeworkcore.abstractions.9.0.9.nupkg.sha512",
     "C:\\Users\\Chuwi\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\9.0.8\\microsoft.entityframeworkcore.analyzers.9.0.8.nupkg.sha512",
     "C:\\Users\\Chuwi\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\9.0.8\\microsoft.extensions.caching.abstractions.9.0.8.nupkg.sha512",
     "C:\\Users\\Chuwi\\.nuget\\packages\\microsoft.extensions.caching.memory\\9.0.8\\microsoft.extensions.caching.memory.9.0.8.nupkg.sha512",
@@ -63,9 +63,12 @@
     "C:\\Users\\Chuwi\\.nuget\\packages\\microsoft.extensions.objectpool\\9.0.2\\microsoft.extensions.objectpool.9.0.2.nupkg.sha512",
     "C:\\Users\\Chuwi\\.nuget\\packages\\microsoft.extensions.options\\9.0.8\\microsoft.extensions.options.9.0.8.nupkg.sha512",
     "C:\\Users\\Chuwi\\.nuget\\packages\\microsoft.extensions.primitives\\9.0.8\\microsoft.extensions.primitives.9.0.8.nupkg.sha512",
+    "C:\\Users\\Chuwi\\.nuget\\packages\\rabbitmq.client\\7.1.2\\rabbitmq.client.7.1.2.nupkg.sha512",
     "C:\\Users\\Chuwi\\.nuget\\packages\\strawberryshake.core\\16.0.0-p.7.51\\strawberryshake.core.16.0.0-p.7.51.nupkg.sha512",
     "C:\\Users\\Chuwi\\.nuget\\packages\\strawberryshake.resources\\16.0.0-p.7.51\\strawberryshake.resources.16.0.0-p.7.51.nupkg.sha512",
     "C:\\Users\\Chuwi\\.nuget\\packages\\system.io.hashing\\8.0.0\\system.io.hashing.8.0.0.nupkg.sha512",
+    "C:\\Users\\Chuwi\\.nuget\\packages\\system.io.pipelines\\8.0.0\\system.io.pipelines.8.0.0.nupkg.sha512",
+    "C:\\Users\\Chuwi\\.nuget\\packages\\system.threading.ratelimiting\\8.0.0\\system.threading.ratelimiting.8.0.0.nupkg.sha512",
     "C:\\Users\\Chuwi\\.nuget\\packages\\yarp.reverseproxy\\2.3.0\\yarp.reverseproxy.2.3.0.nupkg.sha512"
   ],
   "logs": []

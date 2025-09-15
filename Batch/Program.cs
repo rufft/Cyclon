@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using Batch.Context;
 using Batch.GraphQL;
 using Batch.Models.Displays;
+using Cyclone.Common.SimpleDatabase;
 using Cyclone.Common.SimpleService;
 using Cyclone.Common.SimpleSoftDelete;
 using Cyclone.Common.SimpleSoftDelete.Extensions;
@@ -17,6 +18,11 @@ builder.Services.AddSimpleServices();
 builder.Services.AddScoped<Query>();
 builder.Services.AddScoped<Mutation>();
 
+// builder.Services.AddRabbitMqSoftDelete(opt => 
+//     builder.Configuration.GetSection("RabbitMQ").Bind(opt));
+
+//builder.Services.AddRabbitMqSoftDelete();
+
 builder.Services
     .AddGraphQLServer()
     .AddQueryType<Query>()
@@ -24,24 +30,19 @@ builder.Services
     .AddProjections()
     .AddFiltering()
     .AddSorting()
-    .AddDeletionSubscriptions()
     .ModifyRequestOptions(opts =>
     {
         opts.IncludeExceptionDetails = builder.Environment.IsDevelopment();
     });
 
-builder.Services.AddSoftDeleteEventSystem(() =>
-{
-    SoftDeletePolicyRegistry.RegisterCollection<Batch.Models.Batch, Display>(b => b.Displays);
-    SoftDeletePolicyRegistry.RegisterCollection<DisplayType, Batch.Models.Batch>(dt => dt.Batches);
-}, originServiceName: "Batch");
 
-builder.Services.AddDbContextFactory<BatchDbContext>((sp, options) =>
-{
+SoftDeletePolicyRegistry.RegisterCollection<Batch.Models.Batch, Display>(b => b.Displays);
+SoftDeletePolicyRegistry.RegisterCollection<DisplayType, Batch.Models.Batch>(dt => dt.Batches);
+
+
+builder.Services.AddSimpleDbContext<BatchDbContext>(options =>
     options.UseNpgsql(connectionString, b =>
-        b.MigrationsAssembly(typeof(BatchDbContext).Assembly.FullName));
-    options.AddInterceptors(new SoftDeletePublishInterceptor("Batch"));
-});
+        b.MigrationsAssembly(typeof(BatchDbContext).Assembly.FullName)));
 
 
 builder.Services.AddCors(options =>
@@ -73,7 +74,7 @@ app.UseRouting();
 
 app.MapGraphQL("/graphql");
 
-app.UseWebSockets();
+//app.UseWebSockets();
 
 app.MapControllers();
 

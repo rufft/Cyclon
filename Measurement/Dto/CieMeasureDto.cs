@@ -17,8 +17,11 @@ public record CreateCieMeasureDto : MeasureDto
     public double? Lv { get; init; }
 }
 
-public record UpdateCieMeasureDto : MeasureDto
+public record UpdateCieMeasureDto
 {
+    [Required]
+    public string? Id { get; init; }
+    
     [Range(0, 1, ErrorMessage = "Cie x, y должен быть от 0 до 1")]
     public double? CieX { get; init; }
     
