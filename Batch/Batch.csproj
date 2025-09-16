@@ -19,7 +19,6 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
-        <PackageReference Include="StrawberryShake.Transport.WebSockets" Version="16.0.0-p.7.63" />
     </ItemGroup>
 
     <ItemGroup>

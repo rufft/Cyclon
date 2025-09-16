@@ -86,9 +86,7 @@ C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\HotChocolate.Pe
 C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\HotChocolate.PersistedOperations.Pipeline.dll
 C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\HotChocolate.Subscriptions.dll
 C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\HotChocolate.Subscriptions.InMemory.dll
-C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\HotChocolate.Transport.Abstractions.dll
 C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\HotChocolate.Transport.Formatters.dll
-C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\HotChocolate.Transport.Http.dll
 C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\HotChocolate.Transport.Sockets.dll
 C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\HotChocolate.Types.CursorPagination.dll
 C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\HotChocolate.Types.CursorPagination.Extensions.dll
@@ -98,21 +96,10 @@ C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\HotChocolate.Ty
 C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\HotChocolate.Types.Scalars.Upload.dll
 C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\HotChocolate.Utilities.DependencyInjection.dll
 C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\HotChocolate.Validation.dll
-C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\Microsoft.AspNetCore.WebUtilities.dll
 C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Relational.dll
-C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\Microsoft.Extensions.Configuration.dll
 C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\Microsoft.Extensions.Configuration.Abstractions.dll
-C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\Microsoft.Extensions.Configuration.Binder.dll
-C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\Microsoft.Extensions.Diagnostics.dll
-C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\Microsoft.Extensions.Diagnostics.Abstractions.dll
-C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\Microsoft.Extensions.Http.dll
-C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\Microsoft.Extensions.Options.ConfigurationExtensions.dll
-C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\Microsoft.Net.Http.Headers.dll
 C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\Npgsql.dll
 C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
-C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\StrawberryShake.Core.dll
-C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\StrawberryShake.Resources.dll
-C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\StrawberryShake.Transport.Http.dll
 C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\System.IO.Hashing.dll
 C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\Yarp.ReverseProxy.dll
 C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\Batch.dll
@@ -201,5 +188,4 @@ C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\ru\Microsoft.Co
 C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\tr\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
-C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\StrawberryShake.Transport.WebSockets.dll
 C:\Users\Chuwi\RiderProjects\Cyclon\Measurement\bin\Debug\net9.0\RabbitMQ.Client.dll

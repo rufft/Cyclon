@@ -5,43 +5,35 @@ namespace Measurement.Models.MeasureTypes;
 public class PowerMeasure : Measure
 {
     private PowerMeasure() { }
-    
-    public PowerChannelAvailable ChannelAvailable { get; private set; }
 
-    public PowerMeasure(PowerChannelAvailable channelAvailable, double[] current, double voltage)
-    {
-        ChannelAvailable = channelAvailable;
-        Voltage = voltage;
-
-        ArgumentNullException.ThrowIfNull(current);
-
-        switch (ChannelAvailable)
+    public PowerChannels Channels =>
+        PowerPairs.Count switch
         {
-            case PowerChannelAvailable.OneChannel:
-                if (current.Length != 1)
-                    throw new ArgumentException("Для одно-канального измерения требуется ровно одно значение current.", nameof(current));
-                break;
+            1 => PowerChannels.OneChannel,
+            3 => PowerChannels.ThreeChannel,
+            _ => throw new ArgumentOutOfRangeException(nameof(PowerPair), "Каналов может быть либо 1, либо 3")
+        };
 
-            case PowerChannelAvailable.ThreeChannel:
-                if (current.Length != 1 && current.Length != 3)
-                    throw new ArgumentException("Для трёх-канального измерения допустимо 1 или 3 значения current.", nameof(current));
-                break;
+    public List<PowerPair> PowerPairs { get; internal set; }
+    
+    public PowerPair? ReversePowerPair { get; internal set; }
 
-            default:
-                throw new ArgumentOutOfRangeException(nameof(channelAvailable), channelAvailable, "Неизвестный режим каналов.");
-        }
-        
-        ChannelAvailable = channelAvailable;
-
-        Current = (double[])current.Clone();
+    public PowerMeasure(Guid displayId, List<PowerPair> powerPairs, PowerPair? reversePowerPair = null)
+    {
+        DisplayId = displayId;
+        PowerPairs = PowerPair.IsInCorrectChanel(powerPairs)
+            ? powerPairs
+            : throw new ArgumentOutOfRangeException(nameof(powerPairs), "Каналов может быть либо 1, либо 3");
+        ReversePowerPair = reversePowerPair;
     }
-    
-    public double Voltage { get; private set; }
-
-    public double[] Current { get; private set; }
-    
 }
-public enum PowerChannelAvailable
+
+public record PowerPair(double Current, double? Voltage = null)
+{
+    public static bool IsInCorrectChanel(List<PowerPair> powerPairs) => powerPairs.Count is 3 or 1;
+}
+
+public enum PowerChannels
 {
     OneChannel = 1,
     ThreeChannel = 3

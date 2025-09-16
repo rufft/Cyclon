@@ -13,7 +13,6 @@
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="9.0.9" />
       <PackageReference Include="RabbitMQ.Client" Version="7.1.2" />
-      <PackageReference Include="StrawberryShake.Core" Version="16.0.0-p.7.51" />
     </ItemGroup>
 
 </Project>

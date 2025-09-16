@@ -2,6 +2,7 @@
 using Cyclone.Common.SimpleClient;
 using Cyclone.Common.SimpleResponse;
 using Cyclone.Common.SimpleService;
+using HotChocolate.Types.Composite;
 using Measurement.Context;
 using Measurement.Dto;
 using Measurement.Models.MeasureTypes;
@@ -23,7 +24,7 @@ public class CieMeasureService(MeasureDbContext db, SimpleClient client) : Simpl
          var lv = (double)dto.Lv;
          if (dto.DisplayId == null)
              return "Введите DisplayId";
-         if (Guid.TryParse(dto.DisplayId, out var expectedDisplayId))
+         if (!Guid.TryParse(dto.DisplayId, out var expectedDisplayId))
              return "Id не в формате Guid";
          
          var response = await client.GetByIdAsync<Display>(expectedDisplayId);
@@ -54,7 +55,7 @@ public class CieMeasureService(MeasureDbContext db, SimpleClient client) : Simpl
          if (dto.Lv is < 0)
              return "Lv должен быт положительным";
          if (dto.Id == null)
-             return "Введите DisplayId";
+             return "Введите Id";
          if (!Guid.TryParse(dto.Id, out var cieId))
              return "Id не в формате Guid";
          
@@ -76,10 +77,10 @@ public class CieMeasureService(MeasureDbContext db, SimpleClient client) : Simpl
          return await UpdateAsync(cieMeasure);
      }
 
-     public async Task<Response<int>> DeleteAsync(string? id)
+     public async Task<Response<int>> DeleteAsync([Require] string? id)
      {
          if (id == null)
-             return "Введите DisplayId";
+             return "Введите Id";
          if (!Guid.TryParse(id, out var cieId))
              return "Id не в формате Guid";
          

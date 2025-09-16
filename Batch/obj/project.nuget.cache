@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "OE5uAAuLlUY=",
+  "dgSpecHash": "oT7vrYOua9g=",
   "success": true,
   "projectFilePath": "C:\\Users\\Chuwi\\RiderProjects\\Cyclon\\Batch\\Batch.csproj",
   "expectedPackageFiles": [
@@ -84,9 +84,6 @@
     "C:\\Users\\Chuwi\\.nuget\\packages\\npgsql\\9.0.3\\npgsql.9.0.3.nupkg.sha512",
     "C:\\Users\\Chuwi\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\9.0.4\\npgsql.entityframeworkcore.postgresql.9.0.4.nupkg.sha512",
     "C:\\Users\\Chuwi\\.nuget\\packages\\rabbitmq.client\\7.1.2\\rabbitmq.client.7.1.2.nupkg.sha512",
-    "C:\\Users\\Chuwi\\.nuget\\packages\\strawberryshake.core\\16.0.0-p.7.63\\strawberryshake.core.16.0.0-p.7.63.nupkg.sha512",
-    "C:\\Users\\Chuwi\\.nuget\\packages\\strawberryshake.resources\\16.0.0-p.7.63\\strawberryshake.resources.16.0.0-p.7.63.nupkg.sha512",
-    "C:\\Users\\Chuwi\\.nuget\\packages\\strawberryshake.transport.websockets\\16.0.0-p.7.63\\strawberryshake.transport.websockets.16.0.0-p.7.63.nupkg.sha512",
     "C:\\Users\\Chuwi\\.nuget\\packages\\system.codedom\\6.0.0\\system.codedom.6.0.0.nupkg.sha512",
     "C:\\Users\\Chuwi\\.nuget\\packages\\system.collections.immutable\\7.0.0\\system.collections.immutable.7.0.0.nupkg.sha512",
     "C:\\Users\\Chuwi\\.nuget\\packages\\system.composition\\7.0.0\\system.composition.7.0.0.nupkg.sha512",

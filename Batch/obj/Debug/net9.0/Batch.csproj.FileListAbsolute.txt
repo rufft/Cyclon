@@ -180,8 +180,5 @@ C:\Users\Chuwi\RiderProjects\Cyclon\Batch\obj\Debug\net9.0\refint\Batch.dll
 C:\Users\Chuwi\RiderProjects\Cyclon\Batch\obj\Debug\net9.0\Batch.pdb
 C:\Users\Chuwi\RiderProjects\Cyclon\Batch\obj\Debug\net9.0\Batch.genruntimeconfig.cache
 C:\Users\Chuwi\RiderProjects\Cyclon\Batch\obj\Debug\net9.0\ref\Batch.dll
-C:\Users\Chuwi\RiderProjects\Cyclon\Batch\bin\Debug\net9.0\StrawberryShake.Core.dll
-C:\Users\Chuwi\RiderProjects\Cyclon\Batch\bin\Debug\net9.0\StrawberryShake.Resources.dll
 C:\Users\Chuwi\RiderProjects\Cyclon\Batch\obj\Debug\net9.0\Batch.sourcelink.json
-C:\Users\Chuwi\RiderProjects\Cyclon\Batch\bin\Debug\net9.0\StrawberryShake.Transport.WebSockets.dll
 C:\Users\Chuwi\RiderProjects\Cyclon\Batch\bin\Debug\net9.0\RabbitMQ.Client.dll

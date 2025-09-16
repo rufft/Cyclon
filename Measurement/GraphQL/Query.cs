@@ -18,4 +18,12 @@ public class Query
     {
         return database.CieMeasures.AsNoTracking();
     }
+    
+    [UsePaging]
+    [UseFiltering]
+    [UseSorting]
+    public IQueryable<PowerMeasure> PowerMeasures([Service] MeasureDbContext database)
+    {
+        return database.PowerMeasures.AsNoTracking();
+    }
 }

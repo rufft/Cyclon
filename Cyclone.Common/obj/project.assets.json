@@ -1039,36 +1039,6 @@
           }
         }
       },
-      "StrawberryShake.Core/16.0.0-p.7.51": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.4",
-          "StrawberryShake.Resources": "16.0.0-p.7.51"
-        },
-        "compile": {
-          "lib/net9.0/StrawberryShake.Core.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net9.0/StrawberryShake.Core.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "StrawberryShake.Resources/16.0.0-p.7.51": {
-        "type": "package",
-        "compile": {
-          "lib/net9.0/StrawberryShake.Resources.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net9.0/StrawberryShake.Resources.dll": {
-            "related": ".xml"
-          }
-        }
-      },
       "System.IO.Hashing/8.0.0": {
         "type": "package",
         "compile": {
@@ -2507,48 +2477,6 @@
         "rabbitmq.client.nuspec"
       ]
     },
-    "StrawberryShake.Core/16.0.0-p.7.51": {
-      "sha512": "+fVsSSB1bATxcqmLRTf3xP2sLUFNYIfa98jIVQ+C32LgURf7DZj6+POgBpeCqJXGEyvEDMzhCR8D+otHIgMWrg==",
-      "type": "package",
-      "path": "strawberryshake.core/16.0.0-p.7.51",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "LICENSE",
-        "greendonut-signet.png",
-        "hotchocolate-signet.png",
-        "lib/net10.0/StrawberryShake.Core.dll",
-        "lib/net10.0/StrawberryShake.Core.xml",
-        "lib/net8.0/StrawberryShake.Core.dll",
-        "lib/net8.0/StrawberryShake.Core.xml",
-        "lib/net9.0/StrawberryShake.Core.dll",
-        "lib/net9.0/StrawberryShake.Core.xml",
-        "strawberryshake-signet.png",
-        "strawberryshake.core.16.0.0-p.7.51.nupkg.sha512",
-        "strawberryshake.core.nuspec"
-      ]
-    },
-    "StrawberryShake.Resources/16.0.0-p.7.51": {
-      "sha512": "u2bx89wxDoMcySIpOxV6nODJDnhYKe78MIjFOHQBMKsbB4jo6+01M1InDJ4VNGgdhVpCa1ynOE7/5W0m5iY2kA==",
-      "type": "package",
-      "path": "strawberryshake.resources/16.0.0-p.7.51",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "LICENSE",
-        "greendonut-signet.png",
-        "hotchocolate-signet.png",
-        "lib/net10.0/StrawberryShake.Resources.dll",
-        "lib/net10.0/StrawberryShake.Resources.xml",
-        "lib/net8.0/StrawberryShake.Resources.dll",
-        "lib/net8.0/StrawberryShake.Resources.xml",
-        "lib/net9.0/StrawberryShake.Resources.dll",
-        "lib/net9.0/StrawberryShake.Resources.xml",
-        "strawberryshake-signet.png",
-        "strawberryshake.resources.16.0.0-p.7.51.nupkg.sha512",
-        "strawberryshake.resources.nuspec"
-      ]
-    },
     "System.IO.Hashing/8.0.0": {
       "sha512": "ne1843evDugl0md7Fjzy6QjJrzsjh46ZKbhf8GwBXb5f/gw97J4bxMs0NQKifDuThh/f0bZ0e62NPl1jzTuRqA==",
       "type": "package",
@@ -2668,8 +2596,7 @@
       "HotChocolate.Types.Abstractions >= 16.0.0-p.7.51",
       "Microsoft.EntityFrameworkCore >= 9.0.8",
       "Microsoft.EntityFrameworkCore.Abstractions >= 9.0.9",
-      "RabbitMQ.Client >= 7.1.2",
-      "StrawberryShake.Core >= 16.0.0-p.7.51"
+      "RabbitMQ.Client >= 7.1.2"
     ]
   },
   "packageFolders": {
@@ -2745,10 +2672,6 @@
           "RabbitMQ.Client": {
             "target": "Package",
             "version": "[7.1.2, )"
-          },
-          "StrawberryShake.Core": {
-            "target": "Package",
-            "version": "[16.0.0-p.7.51, )"
           }
         },
         "imports": [
