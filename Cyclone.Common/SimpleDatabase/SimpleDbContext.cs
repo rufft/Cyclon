@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
+using Cyclone.Common.SimpleDatabase.FileSystem;
 using Cyclone.Common.SimpleEntity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -17,6 +18,7 @@ public class SimpleDbContext(DbContextOptions options,
     : DbContext(options)
 {
     private readonly Assembly[] _entityAssemblies = entityAssemblies ?? [];
+    private readonly bool _filesEnabled = options.FindExtension<FilesFeatureOptionsExtension>()?.Enabled ?? false;
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -27,23 +29,23 @@ public class SimpleDbContext(DbContextOptions options,
             foreach (var asm in _entityAssemblies)
             {
                 var allTypes = GetTypesSafe(asm);
+
                 var entityTypes = allTypes.Where(t =>
-                        t is { IsClass: true, IsAbstract: false } &&
-                        typeof(BaseEntity).IsAssignableFrom(t) &&
-                        !Attribute.IsDefined(t, typeof(OwnedAttribute))
-                );
+                    t is { IsClass: true, IsAbstract: false } &&
+                    typeof(BaseEntity).IsAssignableFrom(t) &&
+                    !Attribute.IsDefined(t, typeof(OwnedAttribute)));
+
+                if (!_filesEnabled)
+                    entityTypes = entityTypes.Where(t => !typeof(IFileEntity).IsAssignableFrom(t));
 
                 foreach (var t in entityTypes)
-                {
                     modelBuilder.Entity(t);
-                }
+
                 try { modelBuilder.ApplyConfigurationsFromAssembly(asm); } catch { /* ignore */ }
             }
 
             RegisterEntityTypes(modelBuilder);
         }
-        
-
 
         ApplyUtcDateTimeConverter(modelBuilder);
         ApplySoftDeleteFilters(modelBuilder);
@@ -66,6 +68,7 @@ public class SimpleDbContext(DbContextOptions options,
                 if (!t.IsClass || t.IsAbstract) continue;
                 if (!typeof(BaseEntity).IsAssignableFrom(t)) continue;
                 if (Attribute.IsDefined(t, typeof(OwnedAttribute))) continue;
+                if (!_filesEnabled && typeof(IFileEntity).IsAssignableFrom(t)) continue;
 
                 modelBuilder.Entity(t);
             }

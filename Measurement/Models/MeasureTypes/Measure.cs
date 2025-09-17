@@ -4,5 +4,5 @@ namespace Measurement.Models.MeasureTypes;
 
 public abstract class Measure : BaseEntity
 {
-    public Guid DisplayId { get; init; }
+    public Guid DisplayId { get; protected init; }
 }

@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using Cyclone.Common.SimpleClient;
 using Cyclone.Common.SimpleDatabase;
+using Cyclone.Common.SimpleDatabase.FileSystem;
 using Cyclone.Common.SimpleService;
 using Cyclone.Common.SimpleSoftDelete;
 using Cyclone.Common.SimpleSoftDelete.Extensions;
@@ -59,9 +60,13 @@ builder.Services.AddHttpClient<SimpleClient>("Batch", (sp, http) =>
     http.BaseAddress = new Uri(opts.Endpoint);
     http.Timeout = opts.Timeout;
 });
+
 builder.Services.AddSimpleDbContext<MeasureDbContext>(options =>
+{
     options.UseNpgsql(connectionString, b =>
-        b.MigrationsAssembly(typeof(MeasureDbContext).Assembly.FullName)));
+        b.MigrationsAssembly(typeof(MeasureDbContext).Assembly.FullName));
+    options.UseUploadedFiles();
+});
 
 
 

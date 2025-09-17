@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "zNGsqAmOhZc=",
+  "dgSpecHash": "e/ZutLznNG8=",
   "success": true,
   "projectFilePath": "C:\\Users\\Chuwi\\RiderProjects\\Cyclon\\Measurement\\Measurement.csproj",
   "expectedPackageFiles": [
@@ -53,6 +53,8 @@
     "C:\\Users\\Chuwi\\.nuget\\packages\\hotchocolate.utilities.tasks\\16.0.0-p.7.41\\hotchocolate.utilities.tasks.16.0.0-p.7.41.nupkg.sha512",
     "C:\\Users\\Chuwi\\.nuget\\packages\\hotchocolate.validation\\16.0.0-p.7.41\\hotchocolate.validation.16.0.0-p.7.41.nupkg.sha512",
     "C:\\Users\\Chuwi\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
+    "C:\\Users\\Chuwi\\.nuget\\packages\\magick.net-q16-anycpu\\14.8.2\\magick.net-q16-anycpu.14.8.2.nupkg.sha512",
+    "C:\\Users\\Chuwi\\.nuget\\packages\\magick.net.core\\14.8.2\\magick.net.core.14.8.2.nupkg.sha512",
     "C:\\Users\\Chuwi\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.8\\microsoft.aspnetcore.openapi.9.0.8.nupkg.sha512",
     "C:\\Users\\Chuwi\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\7.0.0\\microsoft.bcl.asyncinterfaces.7.0.0.nupkg.sha512",
     "C:\\Users\\Chuwi\\.nuget\\packages\\microsoft.build.framework\\17.8.3\\microsoft.build.framework.17.8.3.nupkg.sha512",
