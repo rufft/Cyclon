@@ -1,7 +1,9 @@
-﻿using Batch.Models.Displays;
+﻿using System.ComponentModel.DataAnnotations;
+using Batch.Models.Displays;
 using Cyclone.Common.SimpleClient;
 using Cyclone.Common.SimpleResponse;
 using Cyclone.Common.SimpleService;
+using Cyclone.Common.SimpleSoftDelete;
 using HotChocolate.Types.Composite;
 using Measurement.Context;
 using Measurement.Dto;
@@ -9,8 +11,9 @@ using Measurement.Models.MeasureTypes;
 
 namespace Measurement.Services;
 
-public class PowerMeasureService(MeasureDbContext db, SimpleClient client)
-    : SimpleService<PowerMeasure, MeasureDbContext>(db)
+public class PowerMeasureService(
+    MeasureDbContext db,
+    SimpleClient client) : SimpleService<PowerMeasure, MeasureDbContext>(db)
 {
     public async Task<Response<PowerMeasure>> CreateAsync(CreatePowerMeasureDto dto)
     {
@@ -24,7 +27,7 @@ public class PowerMeasureService(MeasureDbContext db, SimpleClient client)
         if (!Guid.TryParse(dto.DisplayId, out var expectedDisplayId))
             return $"Id не в формате Guid ({dto.DisplayId})";
 
-        var response = await client.GetByIdAsync<Display>(expectedDisplayId);
+        var response = await client.GetIdByIdAsync<Display>(expectedDisplayId);
 
         if (response.Failure)
             return Response<PowerMeasure>.Fail(message: response.Message, errors: response.Errors.ToArray());
@@ -64,7 +67,7 @@ public class PowerMeasureService(MeasureDbContext db, SimpleClient client)
         return await UpdateAsync(powerMeasure);
     }
 
-    public async Task<Response<int>> DeleteAsync([Require] string? id)
+    public async Task<Response<List<DeleteEntityInfo>>> DeleteAsync([Required] string? id)
     {
         if (id == null)
             return "Введите Id";

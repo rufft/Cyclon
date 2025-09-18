@@ -1,6 +1,7 @@
 ﻿using Cyclone.Common.SimpleDatabase;
 using Cyclone.Common.SimpleEntity;
 using Cyclone.Common.SimpleResponse;
+using Cyclone.Common.SimpleSoftDelete;
 using Cyclone.Common.SimpleSoftDelete.Extensions;
 using Microsoft.EntityFrameworkCore;
 
@@ -40,7 +41,7 @@ public class SimpleService<TEntity, TDbContext>(TDbContext db)
         }
     }
 
-    protected async Task<Response<int>> SoftDeleteAsync(TEntity entity)
+    protected async Task<Response<List<DeleteEntityInfo>>> SoftDeleteAsync(TEntity entity)
     {
         var strategy = Db.Database.CreateExecutionStrategy();
 
@@ -51,7 +52,7 @@ public class SimpleService<TEntity, TDbContext>(TDbContext db)
             try
             {
                 await Db.SaveChangesAsync();
-                return Response<int>.Ok(deletedCount);
+                return Response<List<DeleteEntityInfo>>.Ok(deletedCount);
             }
             catch (DbUpdateException ex)
             {

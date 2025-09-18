@@ -182,3 +182,13 @@ C:\Users\Chuwi\RiderProjects\Cyclon\Batch\obj\Debug\net9.0\Batch.genruntimeconfi
 C:\Users\Chuwi\RiderProjects\Cyclon\Batch\obj\Debug\net9.0\ref\Batch.dll
 C:\Users\Chuwi\RiderProjects\Cyclon\Batch\obj\Debug\net9.0\Batch.sourcelink.json
 C:\Users\Chuwi\RiderProjects\Cyclon\Batch\bin\Debug\net9.0\RabbitMQ.Client.dll
+C:\Users\Chuwi\RiderProjects\Cyclon\Batch\bin\Debug\net9.0\Magick.NET-Q16-AnyCPU.dll
+C:\Users\Chuwi\RiderProjects\Cyclon\Batch\bin\Debug\net9.0\Magick.NET.Core.dll
+C:\Users\Chuwi\RiderProjects\Cyclon\Batch\bin\Debug\net9.0\runtimes\linux-arm64\native\Magick.Native-Q16-arm64.dll.so
+C:\Users\Chuwi\RiderProjects\Cyclon\Batch\bin\Debug\net9.0\runtimes\linux-musl-x64\native\Magick.Native-Q16-x64.dll.so
+C:\Users\Chuwi\RiderProjects\Cyclon\Batch\bin\Debug\net9.0\runtimes\linux-x64\native\Magick.Native-Q16-x64.dll.so
+C:\Users\Chuwi\RiderProjects\Cyclon\Batch\bin\Debug\net9.0\runtimes\osx-arm64\native\Magick.Native-Q16-arm64.dll.dylib
+C:\Users\Chuwi\RiderProjects\Cyclon\Batch\bin\Debug\net9.0\runtimes\osx-x64\native\Magick.Native-Q16-x64.dll.dylib
+C:\Users\Chuwi\RiderProjects\Cyclon\Batch\bin\Debug\net9.0\runtimes\win-arm64\native\Magick.Native-Q16-arm64.dll
+C:\Users\Chuwi\RiderProjects\Cyclon\Batch\bin\Debug\net9.0\runtimes\win-x64\native\Magick.Native-Q16-x64.dll
+C:\Users\Chuwi\RiderProjects\Cyclon\Batch\bin\Debug\net9.0\runtimes\win-x86\native\Magick.Native-Q16-x86.dll

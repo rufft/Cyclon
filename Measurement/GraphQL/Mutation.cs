@@ -1,4 +1,6 @@
-﻿using Cyclone.Common.SimpleResponse;
+﻿using System.ComponentModel.DataAnnotations;
+using Cyclone.Common.SimpleResponse;
+using Cyclone.Common.SimpleSoftDelete;
 using HotChocolate;
 using HotChocolate.Types.Composite;
 using Measurement.Context;
@@ -11,34 +13,32 @@ namespace Measurement.GraphQL;
 public class Mutation([Service] MeasureDbContext db)
 { 
     // Cie
-    public async Task<Response<CieMeasure>> CreateCieMeasureAsync([Service] CieMeasureService cieMeasureService, CreateCieMeasureDto input)
-    {
-        return await cieMeasureService.CreateAsync(input);
-    }
+    public async Task<Response<CieMeasure>> CreateCieMeasureAsync(
+        [Service] CieMeasureService cieMeasureService, CreateCieMeasureDto input) 
+        => await cieMeasureService.CreateAsync(input);
+    public async Task<Response<CieMeasure>> UpdateCieMeasureAsync(
+        [Service] CieMeasureService cieMeasureService, UpdateCieMeasureDto input) 
+        => await cieMeasureService.UpdateAsync(input);
+    public async Task<Response<List<DeleteEntityInfo>>> DeleteCieMeasureAsync(
+        [Service] CieMeasureService cieMeasureService, [Required] string? id)
+        => await cieMeasureService.DeleteAsync(id);
 
-    public async Task<Response<CieMeasure>> UpdateCieMeasureAsync([Service] CieMeasureService cieMeasureService, UpdateCieMeasureDto input)
-    {
-        return await cieMeasureService.UpdateAsync(input);
-    }
-
-    public async Task<Response<int>> DeleteCieMeasureAsync([Service] CieMeasureService cieMeasureService, [Require] string? id)
-    {
-        return await cieMeasureService.DeleteAsync(id);
-    }
-    
     // Power
-    public async Task<Response<PowerMeasure>> CreatePowerMeasureAsync([Service] PowerMeasureService powerMeasureService, CreatePowerMeasureDto input)
-    {
-        return await powerMeasureService.CreateAsync(input);
-    }
+    public async Task<Response<PowerMeasure>> CreatePowerMeasureAsync(
+        [Service] PowerMeasureService powerMeasureService, CreatePowerMeasureDto input) 
+        => await powerMeasureService.CreateAsync(input);
+    public async Task<Response<PowerMeasure>> UpdatePowerMeasureAsync(
+        [Service] PowerMeasureService powerMeasureService, UpdatePowerMeasureDto input)
+        => await powerMeasureService.UpdateAsync(input);
+    public async Task<Response<List<DeleteEntityInfo>>> DeletePowerMeasureAsync(
+        [Service] PowerMeasureService powerMeasureService, [Required] string? id) 
+        => await powerMeasureService.DeleteAsync(id);
 
-    public async Task<Response<PowerMeasure>> UpdatePowerMeasureAsync([Service] PowerMeasureService powerMeasureService, UpdatePowerMeasureDto input)
-    {
-        return await powerMeasureService.UpdateAsync(input);
-    }
-    
-    public async Task<Response<int>> DeletePowerMeasureAsync([Service] PowerMeasureService powerMeasureService, [Require] string? id)
-    {
-        return await powerMeasureService.DeleteAsync(id);
-    }
+    // View
+    public async Task<Response<ViewMeasure>> CreateViewMeasureAsync(
+        [Service] ViewMeasureService viewMeasureService, CreateViewMeasureDto input)
+    => await viewMeasureService.CreateAsync(input);
+    public async Task<Response<List<DeleteEntityInfo>>> DeleteViewMeasureAsync(
+        [Service] ViewMeasureService viewMeasureService, [Required] string? id) 
+        => await viewMeasureService.DeleteAsync(id);
 }

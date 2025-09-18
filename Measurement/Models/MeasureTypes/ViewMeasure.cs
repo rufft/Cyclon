@@ -6,8 +6,9 @@ public class ViewMeasure : Measure
 {
     private ViewMeasure() { }
     
-    public ViewMeasure(bool isDefected, UploadedFile? originalImage = null, UploadedFile? compresedImage = null)
+    public ViewMeasure(Guid displayId, bool isDefected, UploadedFile? originalImage = null, UploadedFile? compresedImage = null)
     {
+        DisplayId = displayId;
         IsDefected = isDefected;
         OriginalImage = originalImage;
         CompresedImage = compresedImage;
@@ -26,6 +27,7 @@ public class ViewMeasure : Measure
             }   
             if (UploadedFile.GetCategory(value.FileType) is not FileCategory.Image)
                 throw new InvalidDataException(nameof(value));
+            _originalImage = value;
         }
     }
 
@@ -42,6 +44,7 @@ public class ViewMeasure : Measure
             }   
             if (UploadedFile.GetCategory(value.FileType) is not FileCategory.Image)
                 throw new InvalidDataException(nameof(value));
+            _compresedImage = value;
         }
     }
     

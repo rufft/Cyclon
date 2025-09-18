@@ -32,4 +32,8 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="public\uploads\2025\09\" />
+    </ItemGroup>
+
 </Project>

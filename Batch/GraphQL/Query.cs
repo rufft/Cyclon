@@ -33,7 +33,9 @@ public class Query
             .AsNoTracking();
 
     public async Task<Display?> GetDisplayByIdAsync([Service] BatchDbContext database, Guid id) =>
-        await database.Displays.FindAsync(id);
+        await database.Displays
+            .Include(x => x.DisplayType)
+            .FirstOrDefaultAsync(x => x.Id == id);
     
     public async Task<Models.Batch?> GetBatchByIdAsync([Service] BatchDbContext database, Guid id) =>
         await database.Batches.FindAsync(id);

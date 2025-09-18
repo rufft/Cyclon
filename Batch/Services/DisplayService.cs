@@ -2,13 +2,14 @@
 using Batch.Models.Displays;
 using Cyclone.Common.SimpleResponse;
 using Cyclone.Common.SimpleService;
+using Cyclone.Common.SimpleSoftDelete;
 using Microsoft.EntityFrameworkCore;
 
 namespace Batch.Services;
 
 public class DisplayService(BatchDbContext db) : SimpleService<Display, BatchDbContext>(db)
 {
-    public async Task<Response<int>> SoftDeleteDisplayAsync(string id)
+    public async Task<Response<List<DeleteEntityInfo>>> SoftDeleteDisplayAsync(string id)
     {
         if (!Guid.TryParse(id, out var displayId))
             return "Id имеет неверный формат GUID.";

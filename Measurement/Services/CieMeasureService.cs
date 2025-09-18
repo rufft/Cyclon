@@ -2,6 +2,7 @@
 using Cyclone.Common.SimpleClient;
 using Cyclone.Common.SimpleResponse;
 using Cyclone.Common.SimpleService;
+using Cyclone.Common.SimpleSoftDelete;
 using HotChocolate.Types.Composite;
 using Measurement.Context;
 using Measurement.Dto;
@@ -27,7 +28,7 @@ public class CieMeasureService(MeasureDbContext db, SimpleClient client) : Simpl
          if (!Guid.TryParse(dto.DisplayId, out var expectedDisplayId))
              return "Id не в формате Guid";
          
-         var response = await client.GetByIdAsync<Display>(expectedDisplayId);
+         var response = await client.GetIdByIdAsync<Display>(expectedDisplayId);
          
          if (response.Failure)
              return Response<CieMeasure>.Fail(message: response.Message, errors: response.Errors.ToArray());
@@ -77,7 +78,7 @@ public class CieMeasureService(MeasureDbContext db, SimpleClient client) : Simpl
          return await UpdateAsync(cieMeasure);
      }
 
-     public async Task<Response<int>> DeleteAsync([Require] string? id)
+     public async Task<Response<List<DeleteEntityInfo>>> DeleteAsync([Require] string? id)
      {
          if (id == null)
              return "Введите Id";

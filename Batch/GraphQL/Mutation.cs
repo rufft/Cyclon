@@ -4,6 +4,7 @@ using Batch.Models.Displays;
 using Batch.Models.DTO;
 using Batch.Services;
 using Cyclone.Common.SimpleResponse;
+using Cyclone.Common.SimpleSoftDelete;
 
 namespace Batch.GraphQL;
 
@@ -37,7 +38,7 @@ public class Mutation
         return await _batchService.UpdateBatchAsync(input);
     }
     
-    public async Task<Response<int>> SoftDeleteBatchAsync(string batchId)
+    public async Task<Response<List<DeleteEntityInfo>>> SoftDeleteBatchAsync(string batchId)
     {
         return await _batchService.SoftDeleteBatchAsync(batchId);
     }
@@ -58,7 +59,7 @@ public class Mutation
         return await _displayTypeService.UpdateDisplayTypeAsync(input);
     }
 
-    public async Task<Response<int>> SoftDeleteDisplayTypeAsync(string displayTypeId)
+    public async Task<Response<List<DeleteEntityInfo>>> SoftDeleteDisplayTypeAsync(string displayTypeId)
     {
         return await _displayTypeService.SoftDeleteDisplayTypeAsync(displayTypeId);
     }
@@ -69,7 +70,7 @@ public class Mutation
     }
     
     // ==== Display ====
-    public async Task<Response<int>> SoftDeleteDisplayAsync(string displayTypeId)
+    public async Task<Response<List<DeleteEntityInfo>>> SoftDeleteDisplayAsync(string displayTypeId)
     {
         return await _displayService.SoftDeleteDisplayAsync(displayTypeId);
     }

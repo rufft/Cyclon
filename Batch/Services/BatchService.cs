@@ -5,6 +5,7 @@ using Batch.Models.Displays;
 using Batch.Models.DTO;
 using Cyclone.Common.SimpleResponse;
 using Cyclone.Common.SimpleService;
+using Cyclone.Common.SimpleSoftDelete;
 using Microsoft.EntityFrameworkCore;
 using static Batch.Extensions.Validation.ValidationConstants;
 
@@ -67,7 +68,7 @@ public class BatchService(BatchDbContext db) : SimpleService<Models.Batch, Batch
         return await UpdateAsync(batch);
     }
 
-    public async Task<Response<int>> SoftDeleteBatchAsync(string id)
+    public async Task<Response<List<DeleteEntityInfo>>> SoftDeleteBatchAsync(string id)
     {
         if (!Guid.TryParse(id, out var batchId))
             return "Id имеет неверный формат GUID.";

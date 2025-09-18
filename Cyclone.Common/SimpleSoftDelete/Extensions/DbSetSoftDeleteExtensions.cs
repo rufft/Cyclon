@@ -29,7 +29,7 @@ public static class DbSetSoftDeleteExtensions
         await db.SaveChangesAsync(cancellationToken);;
     }
     
-    public static Task<int> SoftDeleteCascadeAsync<T>(
+    public static Task<List<DeleteEntityInfo>> SoftDeleteCascadeAsync<T>(
         this DbSet<T> set,
         Guid id,
         string? deletedBy = null,
@@ -43,7 +43,7 @@ public static class DbSetSoftDeleteExtensions
         return SoftDeleteCascadeCoreAsync(db, set, id, deletedBy, useTransaction, cancellationToken);
     }
 
-    public static Task<int> SoftDeleteCascadeAsync<T>(
+    public static Task<List<DeleteEntityInfo>> SoftDeleteCascadeAsync<T>(
         this DbSet<T> set,
         T rootEntity,
         string? deletedBy = null,
@@ -58,7 +58,7 @@ public static class DbSetSoftDeleteExtensions
         return SoftDeleteCascadeCoreAsync(db, set, rootEntity, deletedBy, useTransaction, cancellationToken);
     }
 
-    private static async Task<int> SoftDeleteCascadeCoreAsync<T>(
+    private static async Task<List<DeleteEntityInfo>> SoftDeleteCascadeCoreAsync<T>(
         DbContext db,
         DbSet<T> set,
         Guid id,
@@ -72,7 +72,7 @@ public static class DbSetSoftDeleteExtensions
         return await SoftDeleteCascadeCoreAsync(db, set, root, deletedBy, useTransaction, cancellationToken);
     }
 
-    private static async Task<int> SoftDeleteCascadeCoreAsync<T>(
+    private static async Task<List<DeleteEntityInfo>> SoftDeleteCascadeCoreAsync<T>(
         DbContext db,
         DbSet<T> set,
         BaseEntity rootEntity,
@@ -102,17 +102,16 @@ public static class DbSetSoftDeleteExtensions
         });
     }
 
-    private static async Task<int> SoftDeleteRecursiveInternalAsync(
+    private static async Task<List<DeleteEntityInfo>> SoftDeleteRecursiveInternalAsync(
         DbContext db,
         object entityObj,
         string? deletedBy,
         HashSet<Guid> visited,
         CancellationToken cancellationToken)
     {
-        if (entityObj is not BaseEntity be) return 0;
-        if (!visited.Add(be.Id)) return 0;
+        if (entityObj is not BaseEntity be || !visited.Add(be.Id)) return [];
 
-        var marked = 0;
+        var deleteEntityInfos = new List<DeleteEntityInfo>();
 
         if (!be.IsDeleted)
         {
@@ -122,11 +121,11 @@ public static class DbSetSoftDeleteExtensions
             var entry = db.Entry(be);
             if (entry.State == EntityState.Detached) db.Attach(be);
             entry.State = EntityState.Modified;
-            marked++;
+            deleteEntityInfos.Add(new DeleteEntityInfo(entry.Entity, be.DeletedBy));
         }
 
         var policies = SoftDeletePolicyRegistry.GetPoliciesFor(entityObj.GetType());
-        if (policies.Count == 0) return marked;
+        if (policies.Count == 0) return deleteEntityInfos;
 
         foreach (var nav in policies)
         {
@@ -145,7 +144,7 @@ public static class DbSetSoftDeleteExtensions
                     {
                         if (!nav.ChildType.IsInstanceOfType(childBase)) continue;
                         if (nav.Predicate != null && !nav.Predicate(childBase)) continue;
-                        marked += await SoftDeleteRecursiveInternalAsync(db, childBase, deletedBy, visited, cancellationToken);
+                        deleteEntityInfos.AddRange(await SoftDeleteRecursiveInternalAsync(db, childBase, deletedBy, visited, cancellationToken));
                     }
                 }
                 else
@@ -160,7 +159,7 @@ public static class DbSetSoftDeleteExtensions
                     if (!nav.ChildType.IsInstanceOfType(childObj)) continue;
                     if (nav.Predicate != null && !nav.Predicate(childObj)) continue;
 
-                    marked += await SoftDeleteRecursiveInternalAsync(db, childObj, deletedBy, visited, cancellationToken);
+                    deleteEntityInfos.AddRange(await SoftDeleteRecursiveInternalAsync(db, childObj, deletedBy, visited, cancellationToken));
                 }
             }
             catch (InvalidOperationException)
@@ -169,7 +168,7 @@ public static class DbSetSoftDeleteExtensions
             }
         }
 
-        return marked;
+        return deleteEntityInfos;
     }
 
     // ---------------- Restore ----------------

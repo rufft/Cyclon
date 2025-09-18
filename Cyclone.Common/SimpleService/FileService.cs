@@ -3,11 +3,14 @@ using Cyclone.Common.SimpleDatabase.FileSystem;
 using Cyclone.Common.SimpleResponse;
 using Microsoft.AspNetCore.Hosting;
 using ImageMagick;
+using Microsoft.EntityFrameworkCore;
 using Path = System.IO.Path;
 
 namespace Cyclone.Common.SimpleService;
 
-public class FileService(SimpleDbContext db, IWebHostEnvironment env) : SimpleService<UploadedFile, SimpleDbContext>(db)
+public class FileService<TDbContext>(TDbContext db, IWebHostEnvironment env) 
+    : SimpleService<UploadedFile, TDbContext>(db) 
+    where TDbContext : SimpleDbContext
 {
     private static string BuildRelativePath(Guid id, string? ext) =>
         Path.Combine("uploads",
@@ -47,6 +50,7 @@ public class FileService(SimpleDbContext db, IWebHostEnvironment env) : SimpleSe
             return "Не разрешенный формат файла";
         
         var id = Guid.NewGuid();
+        var newName = id.ToString("N") + ext;
         var relative = BuildRelativePath(id, ext);
         var webRoot = env.WebRootPath ?? throw new InvalidOperationException("WebRootPath не настроен.");
         var physicalPath = Path.Combine(webRoot, relative);
@@ -58,7 +62,7 @@ public class FileService(SimpleDbContext db, IWebHostEnvironment env) : SimpleSe
             await src.CopyToAsync(dst);
         }
 
-        var entity = new UploadedFile(originalName, fileType, physicalPath);
+        var entity = new UploadedFile(newName, fileType, physicalPath);
 
         return await CreateAsync(entity);
     }
@@ -144,6 +148,7 @@ public class FileService(SimpleDbContext db, IWebHostEnvironment env) : SimpleSe
         image.Format = MagickFormat.Ico;
 
         var newId = Guid.NewGuid();
+        var newName = newId.ToString("N") + ".ico";
         var relative = BuildRelativePath(newId, ".ico");
         var webRoot = env.WebRootPath ?? throw new InvalidOperationException("WebRootPath не настроен.");
         var physicalPath = Path.Combine(webRoot, relative);
@@ -151,7 +156,7 @@ public class FileService(SimpleDbContext db, IWebHostEnvironment env) : SimpleSe
 
         await image.WriteAsync(physicalPath);
 
-        var icoEntity = new UploadedFile(file.FileName, FileType.ImageIco, physicalPath);
+        var icoEntity = new UploadedFile(newName, FileType.ImageIco, physicalPath);
 
         return await CreateAsync(icoEntity);
     }
