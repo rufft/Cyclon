@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "GrI2dS5ZMaU=",
+  "dgSpecHash": "I7udhCvPvnI=",
   "success": true,
   "projectFilePath": "C:\\Users\\Student\\RiderProjects\\Cyclon\\Measurement\\Measurement.csproj",
   "expectedPackageFiles": [
@@ -17,7 +17,7 @@
     "C:\\Users\\Student\\.nuget\\packages\\hotchocolate.authorization\\16.0.0-p.8.18\\hotchocolate.authorization.16.0.0-p.8.18.nupkg.sha512",
     "C:\\Users\\Student\\.nuget\\packages\\hotchocolate.caching.memory\\16.0.0-p.8.18\\hotchocolate.caching.memory.16.0.0-p.8.18.nupkg.sha512",
     "C:\\Users\\Student\\.nuget\\packages\\hotchocolate.costanalysis\\16.0.0-p.8.18\\hotchocolate.costanalysis.16.0.0-p.8.18.nupkg.sha512",
-    "C:\\Users\\Student\\.nuget\\packages\\hotchocolate.data\\16.0.0-p.7.41\\hotchocolate.data.16.0.0-p.7.41.nupkg.sha512",
+    "C:\\Users\\Student\\.nuget\\packages\\hotchocolate.data\\16.0.0-p.8.18\\hotchocolate.data.16.0.0-p.8.18.nupkg.sha512",
     "C:\\Users\\Student\\.nuget\\packages\\hotchocolate.execution\\16.0.0-p.8.18\\hotchocolate.execution.16.0.0-p.8.18.nupkg.sha512",
     "C:\\Users\\Student\\.nuget\\packages\\hotchocolate.execution.abstractions\\16.0.0-p.8.18\\hotchocolate.execution.abstractions.16.0.0-p.8.18.nupkg.sha512",
     "C:\\Users\\Student\\.nuget\\packages\\hotchocolate.execution.configuration.abstractions\\16.0.0-p.8.18\\hotchocolate.execution.configuration.abstractions.16.0.0-p.8.18.nupkg.sha512",

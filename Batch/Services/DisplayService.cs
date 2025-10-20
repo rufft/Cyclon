@@ -4,10 +4,11 @@ using Cyclone.Common.SimpleResponse;
 using Cyclone.Common.SimpleService;
 using Cyclone.Common.SimpleSoftDelete;
 using Microsoft.EntityFrameworkCore;
+using ILogger = Serilog.ILogger;
 
 namespace Batch.Services;
 
-public class DisplayService(BatchDbContext db) : SimpleService<Display, BatchDbContext>(db)
+public class DisplayService(BatchDbContext db, ILogger logger) : SimpleService<Display, BatchDbContext>(db, logger)
 {
     public async Task<Response<List<DeleteEntityInfo>>> SoftDeleteDisplayAsync(string id)
     {

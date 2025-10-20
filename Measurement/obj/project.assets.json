@@ -235,15 +235,15 @@
           }
         }
       },
-      "HotChocolate.Data/16.0.0-p.7.41": {
+      "HotChocolate.Data/16.0.0-p.8.18": {
         "type": "package",
         "dependencies": {
-          "GreenDonut.Data": "16.0.0-p.7.41",
-          "GreenDonut.Data.Abstractions": "16.0.0-p.7.41",
-          "GreenDonut.Data.Primitives": "16.0.0-p.7.41",
-          "HotChocolate.Execution": "16.0.0-p.7.41",
-          "HotChocolate.Execution.Projections": "16.0.0-p.7.41",
-          "HotChocolate.Types.CursorPagination": "16.0.0-p.7.41"
+          "GreenDonut.Data": "16.0.0-p.8.18",
+          "GreenDonut.Data.Abstractions": "16.0.0-p.8.18",
+          "GreenDonut.Data.Primitives": "16.0.0-p.8.18",
+          "HotChocolate.Execution": "16.0.0-p.8.18",
+          "HotChocolate.Execution.Projections": "16.0.0-p.8.18",
+          "HotChocolate.Types.CursorPagination": "16.0.0-p.8.18"
         },
         "compile": {
           "lib/net9.0/HotChocolate.Data.dll": {
@@ -2524,11 +2524,11 @@
         "framework": ".NETCoreApp,Version=v9.0",
         "dependencies": {
           "Cyclone.Common": "1.0.0",
-          "HotChocolate": "16.0.0-p.7.41",
-          "HotChocolate.Abstractions": "16.0.0-p.7.41",
-          "HotChocolate.AspNetCore": "16.0.0-p.7.41",
-          "HotChocolate.Data": "16.0.0-p.7.41",
-          "HotChocolate.Types": "16.0.0-p.7.41",
+          "HotChocolate": "16.0.0-p.8.18",
+          "HotChocolate.Abstractions": "16.0.0-p.8.18",
+          "HotChocolate.AspNetCore": "16.0.0-p.8.18",
+          "HotChocolate.Data": "16.0.0-p.8.18",
+          "HotChocolate.Types": "16.0.0-p.8.18",
           "Microsoft.AspNetCore.OpenApi": "9.0.8",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "9.0.4",
           "Serilog": "4.3.1-dev-02387",
@@ -2846,10 +2846,10 @@
         "strawberryshake-signet.png"
       ]
     },
-    "HotChocolate.Data/16.0.0-p.7.41": {
-      "sha512": "J39Smg3stnbpkPeIsqEPgMJv9++3v7qkM6XJqt06OhHqQ1VbGpvdyNeU6eeEJ1tJNy8HyoQJlvaf+UGDeqcbrw==",
+    "HotChocolate.Data/16.0.0-p.8.18": {
+      "sha512": "WI6FBtoDK2PMg7N6I5ms9NT/jEvJGQYGvcxggLbNqH8XxbV+1PvEAzEaivX/9coZqAzHhrdTKTNSTPeryXfaWA==",
       "type": "package",
-      "path": "hotchocolate.data/16.0.0-p.7.41",
+      "path": "hotchocolate.data/16.0.0-p.8.18",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2858,7 +2858,7 @@
         "build/HotChocolate.Data.targets",
         "greendonut-signet.png",
         "hotchocolate-signet.png",
-        "hotchocolate.data.16.0.0-p.7.41.nupkg.sha512",
+        "hotchocolate.data.16.0.0-p.8.18.nupkg.sha512",
         "hotchocolate.data.nuspec",
         "lib/net10.0/HotChocolate.Data.dll",
         "lib/net10.0/HotChocolate.Data.xml",

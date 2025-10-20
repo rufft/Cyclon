@@ -50,23 +50,23 @@
           "dependencies": {
             "HotChocolate": {
               "target": "Package",
-              "version": "[16.0.0-p.7.41, )"
+              "version": "[16.0.0-p.8.18, )"
             },
             "HotChocolate.Abstractions": {
               "target": "Package",
-              "version": "[16.0.0-p.7.41, )"
+              "version": "[16.0.0-p.8.18, )"
             },
             "HotChocolate.AspNetCore": {
               "target": "Package",
-              "version": "[16.0.0-p.7.41, )"
+              "version": "[16.0.0-p.8.18, )"
             },
             "HotChocolate.Data": {
               "target": "Package",
-              "version": "[16.0.0-p.7.41, )"
+              "version": "[16.0.0-p.8.18, )"
             },
             "HotChocolate.Types": {
               "target": "Package",
-              "version": "[16.0.0-p.7.41, )"
+              "version": "[16.0.0-p.8.18, )"
             },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",

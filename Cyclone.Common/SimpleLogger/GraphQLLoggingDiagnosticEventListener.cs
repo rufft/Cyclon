@@ -36,8 +36,14 @@ public class GraphQlLoggingDiagnosticEventListener(ILogger logger) : ExecutionDi
             new PropertyEnricher("CorrelationId", requestId!));
     }
 
-    public override void StopProcessing(RequestContext context)
+    public override void StopProcessing(RequestContext? context)
     {
+        
+        if (context is null)
+        {
+            return;
+        }
+
         var requestId = context.ContextData.TryGetValue("RequestId", out var id) 
             ? id?.ToString() 
             : null;

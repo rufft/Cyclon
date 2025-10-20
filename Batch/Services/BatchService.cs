@@ -8,11 +8,12 @@ using Cyclone.Common.SimpleService;
 using Cyclone.Common.SimpleSoftDelete;
 using Microsoft.EntityFrameworkCore;
 using static Batch.Extensions.Validation.ValidationConstants;
+using ILogger = Serilog.ILogger;
 
 
 namespace Batch.Services;
 
-public class BatchService(BatchDbContext db) : SimpleService<Models.Batch, BatchDbContext>(db)
+public class BatchService(BatchDbContext db, ILogger logger) : SimpleService<Models.Batch, BatchDbContext>(db, logger)
 {
     public async Task<Response<Models.Batch>> CreateBatchAsync(BatchCreateDto dto)
     {

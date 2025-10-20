@@ -70,10 +70,10 @@ public class SimpleService<TEntity, TDbContext>(
     {
         using var _ = LogContext.PushProperty("EntityType", typeof(TEntity).Name);
         using var __ = LogContext.PushProperty("EntityId", entity.Id);
-        
-        logger.Information("Soft deleting entity {EntityType} with ID {EntityId}", 
+
+        logger.Information("Soft deleting entity {EntityType} with ID {EntityId}",
             typeof(TEntity).Name, entity.Id);
-        
+
         var strategy = Db.Database.CreateExecutionStrategy();
 
         return await strategy.ExecuteAsync(async () =>
@@ -84,13 +84,43 @@ public class SimpleService<TEntity, TDbContext>(
             {
                 await Db.SaveChangesAsync();
                 logger.Information(
-                    "Successfully soft deleted entity {EntityType} with ID {EntityId}. Cascade deleted {DeletedCount} related entities", 
+                    "Successfully soft deleted entity {EntityType} with ID {EntityId}. Cascade deleted {DeletedCount} related entities",
                     typeof(TEntity).Name, entity.Id, deletedCount.Count);
                 return Response<List<DeleteEntityInfo>>.Ok(deletedCount);
             }
             catch (DbUpdateException ex)
             {
-                logger.Error(ex, "Failed to soft delete entity {EntityType} with ID {EntityId}", 
+                logger.Error(ex, "Failed to soft delete entity {EntityType} with ID {EntityId}",
+                    typeof(TEntity).Name, entity.Id);
+                return "Ошибка сохранения: " + ex.Message;
+            }
+        });
+    }
+
+protected async Task<Response<int>> RestoreAsync(TEntity entity)
+    {
+        using var _ = LogContext.PushProperty("EntityType", typeof(TEntity).Name);
+        using var __ = LogContext.PushProperty("EntityId", entity.Id);
+        
+        if (!entity.IsDeleted) return $"Сущность с id--{ entity.Id } не удалена";
+    
+        var strategy = Db.Database.CreateExecutionStrategy();
+    
+        return await strategy.ExecuteAsync(async () =>
+        {
+            var restoredEntities = await Db.Set<TEntity>().RestoreCascadeAsync(entity);
+
+            try
+            {
+                await Db.SaveChangesAsync();
+                logger.Information(
+                    "Successfully restore entity {EntityType} with ID {EntityId}. Cascade restore {RestoreCount} related entities",
+                    typeof(TEntity).Name, entity.Id, restoredEntities);
+                return Response<int>.Ok(restoredEntities);
+            }
+            catch (DbUpdateException ex)
+            {
+                logger.Error(ex, "Failed to restore entity {EntityType} with ID {EntityId}",
                     typeof(TEntity).Name, entity.Id);
                 return "Ошибка сохранения: " + ex.Message;
             }

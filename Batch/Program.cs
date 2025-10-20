@@ -94,7 +94,7 @@ app.MapGet("/", () => Results.Redirect("/graphql"));
 
 try
 {
-    Log.Information("Starting application {ServiceName}", "MyMicroservice");
+    Log.Information("Starting application {ServiceName}", "BatchMicroService");
     app.Run();
 }
 catch (Exception ex)

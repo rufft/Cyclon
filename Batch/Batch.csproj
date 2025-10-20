@@ -8,11 +8,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="HotChocolate" Version="16.0.0-p.7.41" />
-        <PackageReference Include="HotChocolate.Abstractions" Version="16.0.0-p.7.41" />
-        <PackageReference Include="HotChocolate.AspNetCore" Version="16.0.0-p.7.41" />
-        <PackageReference Include="HotChocolate.Data" Version="16.0.0-p.7.41" />
-        <PackageReference Include="HotChocolate.Types" Version="16.0.0-p.7.41" />
+        <PackageReference Include="HotChocolate" Version="16.0.0-p.8.18" />
+        <PackageReference Include="HotChocolate.Abstractions" Version="16.0.0-p.8.18" />
+        <PackageReference Include="HotChocolate.AspNetCore" Version="16.0.0-p.8.18" />
+        <PackageReference Include="HotChocolate.Data" Version="16.0.0-p.8.18" />
+        <PackageReference Include="HotChocolate.Types" Version="16.0.0-p.8.18" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.8"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.8">
           <PrivateAssets>all</PrivateAssets>

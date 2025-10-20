@@ -7,10 +7,11 @@ using Cyclone.Common.SimpleResponse;
 using Cyclone.Common.SimpleService;
 using Cyclone.Common.SimpleSoftDelete;
 using Microsoft.EntityFrameworkCore;
+using ILogger = Serilog.ILogger;
 
 namespace Batch.Services;
 
-public class DisplayTypeService(BatchDbContext db) : SimpleService<DisplayType, BatchDbContext>(db)
+public class DisplayTypeService(BatchDbContext db, ILogger logger) : SimpleService<DisplayType, BatchDbContext>(db, logger)
 {
     public async Task<Response<DisplayType>> CreateDisplayTypeAsync(DisplayTypeCreateDto dto)
     {
