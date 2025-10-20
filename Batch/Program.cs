@@ -4,15 +4,22 @@ using Batch.Context;
 using Batch.GraphQL;
 using Batch.Models.Displays;
 using Cyclone.Common.SimpleDatabase;
+using Cyclone.Common.SimpleLogger.Extensions;
 using Cyclone.Common.SimpleService;
 using Cyclone.Common.SimpleSoftDelete;
-using Cyclone.Common.SimpleSoftDelete.Extensions;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
 
 var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+builder.Host.UseSimpleLogging(
+    serviceName: "Batch",
+    connectionString: builder.Configuration.GetConnectionString("DefaultConnection")!,
+    logFilePath: "logs/batch-.txt"
+);
 
 builder.Services.AddSimpleServices();
 builder.Services.AddScoped<Query>();
@@ -25,6 +32,7 @@ builder.Services.AddScoped<Mutation>();
 
 builder.Services
     .AddGraphQLServer()
+    .AddSimpleGraphQlLogging()
     .AddQueryType<Query>()
     .AddMutationType<Mutation>()
     .AddProjections()
@@ -62,7 +70,11 @@ builder.Services.AddControllers().AddJsonOptions(opts =>
     opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
+builder.WebHost.UseUrls("http://0.0.0.0:5299");
+
 var app = builder.Build();
+
+app.UseSimpleRequestLogging();
 
 app.UseCors();
 
@@ -80,4 +92,16 @@ app.MapControllers();
 
 app.MapGet("/", () => Results.Redirect("/graphql"));
 
-app.Run();
+try
+{
+    Log.Information("Starting application {ServiceName}", "MyMicroservice");
+    app.Run();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Application terminated unexpectedly");
+}
+finally
+{
+    Log.CloseAndFlush();
+}

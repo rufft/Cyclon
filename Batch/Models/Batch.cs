@@ -49,7 +49,7 @@ public class Batch : BaseEntity
         var format = displayType.CornersFormat;
         var counter = 0;
         
-        for (var row = 1; row <= rows; row++)
+        for (var row = rows; row >= 1; row--)
         {
             var lShift = 0;
             var rShift = 0;
@@ -64,11 +64,11 @@ public class Batch : BaseEntity
             else if (format[3].Count > rows - row)
                 rShift = format[3][rows - row];
             
-            for (var column = lShift + 1; column <= columns - rShift; column++)
+            for (var column = rShift + 1; column <= columns - lShift; column++)
             {
                 var x = DisplayCounter.ConvertNumToDisplayCoordinates(column);
-                var y = row.ToString();
-                displays[counter] = new Display(displayType, new Coordinates(y, x), this, DisplayColor);
+                var y = (rows - row + 1).ToString();
+                displays[counter] = new Display(displayType, new Coordinates(x, y), this, DisplayColor);
                 counter++;
             }
         }

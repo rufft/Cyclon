@@ -53,7 +53,7 @@ public class ViewMeasureService(
                 imageResponse.Errors.ToArray());
         var image = imageResponse.Data!;
         
-        var compresedImageResponse = await fileService.CompresImageAndUploadAsync(
+        var compresedImageResponse = await fileService.CompressImageAndUploadAsync(
             image,
             screensize.Width,
             screensize.Height);

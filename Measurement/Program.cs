@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text.Json.Serialization;
 using Batch.Models.Displays;
 using Cyclone.Common.SimpleClient;
@@ -91,6 +92,8 @@ builder.Services.AddControllers().AddJsonOptions(opts =>
     opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
+builder.WebHost.UseUrls("http://0.0.0.0:5174");
+
 
 var app = builder.Build();
 
@@ -98,7 +101,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseCors();
+//app.UseCors();
 
 //app.UseWebSockets();
 
