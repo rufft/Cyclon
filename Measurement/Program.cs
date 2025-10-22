@@ -4,6 +4,7 @@ using Batch.Models.Displays;
 using Cyclone.Common.SimpleClient;
 using Cyclone.Common.SimpleDatabase;
 using Cyclone.Common.SimpleDatabase.FileSystem;
+using Cyclone.Common.SimpleLogger.Extensions;
 using Cyclone.Common.SimpleService;
 using Cyclone.Common.SimpleSoftDelete;
 using HotChocolate.Types;
@@ -12,6 +13,7 @@ using Measurement.GraphQL;
 using Measurement.Models.MeasureTypes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Serilog;
 using Query = Measurement.GraphQL.Query;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +21,13 @@ var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
 var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+builder.Host.UseSimpleLogging(
+    serviceName: "Measurement",
+    connectionString: builder.Configuration.GetConnectionString("DefaultConnection")!,
+    logFilePath: "logs/measurement-.txt"
+);
+
 
 builder.Services.AddSimpleServices();
 builder.Services.AddScoped<FileService<MeasureDbContext>>();
@@ -43,6 +52,7 @@ builder.Environment.WebRootPath = Path.Combine(builder.Environment.ContentRootPa
 
 builder.Services
     .AddGraphQLServer()
+    .AddSimpleGraphQlLogging()
     .AddQueryType<Query>()
     .AddMutationType<Mutation>()
     .AddType<UploadType>()
@@ -97,11 +107,13 @@ builder.WebHost.UseUrls("http://0.0.0.0:5174");
 
 var app = builder.Build();
 
+app.UseSimpleRequestLogging();
+
 app.UseStaticFiles();
 
 app.UseRouting();
 
-//app.UseCors();
+app.UseCors();
 
 //app.UseWebSockets();
 
@@ -111,4 +123,16 @@ app.MapControllers();
 
 app.MapGet("/", () => Results.Redirect("/graphql"));
 
-app.Run();
+try
+{
+    Log.Information("Starting application {ServiceName}", "MeasurementMicroService");
+    app.Run();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Application terminated unexpectedly");
+}
+finally
+{
+    Log.CloseAndFlush();
+}

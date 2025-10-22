@@ -8,13 +8,16 @@ using HotChocolate.Types.Composite;
 using Measurement.Context;
 using Measurement.Dto;
 using Measurement.Models.MeasureTypes;
+using ILogger = Serilog.ILogger;
 
 namespace Measurement.Services;
 
 public class PowerMeasureService(
     MeasureDbContext db,
-    SimpleClient client) : SimpleService<PowerMeasure, MeasureDbContext>(db)
+    SimpleClient client, ILogger logger) : SimpleService<PowerMeasure, MeasureDbContext>(db, logger)
 {
+    private readonly MeasureDbContext _db = db;
+
     public async Task<Response<PowerMeasure>> CreateAsync(CreatePowerMeasureDto dto)
     {
         if (dto.PowerPairs is null)
@@ -53,7 +56,7 @@ public class PowerMeasureService(
         if (!Guid.TryParse(dto.Id, out var powerId))
             return "Id не в формате Guid";
 
-        var powerMeasure = await db.FindAsync<PowerMeasure>(powerId);
+        var powerMeasure = await _db.FindAsync<PowerMeasure>(powerId);
 
         if (powerMeasure is null)
             return $"Power измерения с id-- {powerId} не существует";
@@ -74,7 +77,7 @@ public class PowerMeasureService(
         if (!Guid.TryParse(id, out var powerMeasureId))
             return "Id не в формате Guid";
          
-        var powerMeasure = await db.FindAsync<PowerMeasure>(powerMeasureId);
+        var powerMeasure = await _db.FindAsync<PowerMeasure>(powerMeasureId);
 
         if (powerMeasure is null)
             return $"Power измерения с id-- {powerMeasureId} не существует";

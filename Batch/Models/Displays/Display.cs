@@ -11,12 +11,14 @@ public class Display : BaseEntity
         DisplayType displayType,
         Coordinates coordinates,
         Batch batch,
-        DisplayColor color)
+        DisplayColor color,
+        string? description = null)
     {
         DisplayType = displayType;
         Coordinates = coordinates;
         Batch = batch;
         Color = color;
+        Description = description;
     }
     
     public Guid DisplayTypeId { get; private set; }
@@ -33,7 +35,6 @@ public class Display : BaseEntity
     
     public string? CroppedPhotoPath { get; set; }
     
-    public string? Comment { get; set; }
 }
 
 [Owned]

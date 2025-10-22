@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using Cyclone.Common.SimpleSoftDelete;
 using Cyclone.Common.SimpleSoftDelete.Abstractions;
 
 namespace Cyclone.Common.SimpleEntity;
@@ -13,9 +12,11 @@ public class BaseEntity : IIdentifier, ISoftDeletable
     
     public DateTime ModificationTime { get; set; } = DateTime.Now;
     
-    public bool IsDeleted { get; set; } = false;
+    public bool IsDeleted { get; set; }
     
-    public DateTime? DeletedAt { get; set; } = null;
+    public DateTime? DeletedAt { get; set; }
     
-    public string? DeletedBy { get; set; } = string.Empty;
+    public string? DeletedBy { get; set; }
+    
+    public string? Description { get; set; } 
 }

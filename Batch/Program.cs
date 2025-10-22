@@ -78,10 +78,6 @@ app.UseSimpleRequestLogging();
 
 app.UseCors();
 
-if (app.Environment.IsDevelopment())
-{
-}
-
 app.UseRouting();
 
 app.MapGraphQL("/graphql");

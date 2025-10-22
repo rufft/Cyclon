@@ -33,7 +33,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="public\uploads\2025\09\" />
+      <Folder Include="public\uploads\" />
     </ItemGroup>
 
 </Project>

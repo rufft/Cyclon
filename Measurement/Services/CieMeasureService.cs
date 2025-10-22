@@ -7,12 +7,15 @@ using HotChocolate.Types.Composite;
 using Measurement.Context;
 using Measurement.Dto;
 using Measurement.Models.MeasureTypes;
+using ILogger = Serilog.ILogger;
 
 namespace Measurement.Services;
 
-public class CieMeasureService(MeasureDbContext db, SimpleClient client) : SimpleService<CieMeasure, MeasureDbContext>(db)
+public class CieMeasureService(MeasureDbContext db, SimpleClient client, ILogger logger) : SimpleService<CieMeasure, MeasureDbContext>(db, logger)
 {
-     public async Task<Response<CieMeasure>> CreateAsync(CreateCieMeasureDto dto)
+    private readonly MeasureDbContext _db = db;
+
+    public async Task<Response<CieMeasure>> CreateAsync(CreateCieMeasureDto dto)
      {
          if (dto.CieX is null or < 0 and > 1)
              return "Cie x должен быть от 0 до 1";
@@ -60,7 +63,7 @@ public class CieMeasureService(MeasureDbContext db, SimpleClient client) : Simpl
          if (!Guid.TryParse(dto.Id, out var cieId))
              return "Id не в формате Guid";
          
-         var cieMeasure = await db.FindAsync<CieMeasure>(cieId);
+         var cieMeasure = await _db.FindAsync<CieMeasure>(cieId);
 
          if (cieMeasure is null)
              return $"Cie измерения с id-- {cieId} не существует";
@@ -85,7 +88,7 @@ public class CieMeasureService(MeasureDbContext db, SimpleClient client) : Simpl
          if (!Guid.TryParse(id, out var cieId))
              return "Id не в формате Guid";
          
-         var cieMeasure = await db.FindAsync<CieMeasure>(cieId);
+         var cieMeasure = await _db.FindAsync<CieMeasure>(cieId);
 
          if (cieMeasure is null)
              return $"Cie измерения с id-- {cieId} не существует";

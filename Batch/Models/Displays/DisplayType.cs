@@ -14,7 +14,8 @@ public class DisplayType : BaseEntity
         Size screenSize,
         int amountRows,
         int amountColumns,
-        List<List<int>> cornersFormat)
+        List<List<int>> cornersFormat, 
+        string? description = null)
     {
         Name = name;
         Resolution = resolution;
@@ -23,10 +24,11 @@ public class DisplayType : BaseEntity
         AmountRows = amountRows;
         AmountColumns = amountColumns;
         CornersFormat = cornersFormat;
+        Description = description;
 
         var lostDisplays = cornersFormat.SelectMany(row => row).Sum();
 
-        AmountDisplays = (amountRows * amountColumns) - lostDisplays;
+        AmountDisplays = amountRows * amountColumns - lostDisplays;
     }
     
     public string Name { get; set; }

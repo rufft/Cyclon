@@ -37,8 +37,6 @@ public class Batch : BaseEntity
     
     public Cover Cover { get; set; } = Cover.All;
     
-    public string? Description { get; set; }
-    
     public List<Display> Displays { get; set; }
 
     private List<Display> _fillDisplays(DisplayType displayType)

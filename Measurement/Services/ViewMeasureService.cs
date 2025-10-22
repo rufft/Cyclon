@@ -9,6 +9,7 @@ using HotChocolate.Types.Composite;
 using Measurement.Context;
 using Measurement.Dto;
 using Measurement.Models.MeasureTypes;
+using ILogger = Serilog.ILogger;
 
 namespace Measurement.Services;
 
@@ -16,9 +17,11 @@ public class ViewMeasureService(
     MeasureDbContext db,
     FileService<MeasureDbContext> fileService,
     SimpleClient client,
-    ILogger<ViewMeasureService> logger) : SimpleService<ViewMeasure, MeasureDbContext>(db)
+    ILogger logger) : SimpleService<ViewMeasure, MeasureDbContext>(db, logger)
 {
-    private const string ScreensizeQuery = """
+    private readonly MeasureDbContext _db = db;
+
+    private const string ScreenSizeQuery = """
                                            query ($id: UUID!) {
                                              displayById(id: $id) {
                                                displayType { screenSize { height width } }
@@ -37,15 +40,15 @@ public class ViewMeasureService(
         if (dto.ImageFile is null)
             return await CreateAsync(new ViewMeasure(displayId, dto.IsDefected));
 
-        var screensizeResponse = await client.ExecutePathAsync<SizeDto>(
-            ScreensizeQuery,
+        var screenSizeResponse = await client.ExecutePathAsync<SizeDto>(
+            ScreenSizeQuery,
             "displayById.displayType.screenSize",
             new { id = displayResponse.Data }
         );
-        if (screensizeResponse.Failure)
-            return Response<ViewMeasure>.Fail("Не удалось получить форматы дисплея " + screensizeResponse.Message,
-                screensizeResponse.Errors.ToArray());
-        var screensize = screensizeResponse.Data!;
+        if (screenSizeResponse.Failure)
+            return Response<ViewMeasure>.Fail("Не удалось получить форматы дисплея " + screenSizeResponse.Message,
+                screenSizeResponse.Errors.ToArray());
+        var screenSize = screenSizeResponse.Data!;
         
         var imageResponse = await fileService.UploadImageAsync(dto.ImageFile);
         if (imageResponse.Failure || imageResponse.Data is null)
@@ -53,14 +56,14 @@ public class ViewMeasureService(
                 imageResponse.Errors.ToArray());
         var image = imageResponse.Data!;
         
-        var compresedImageResponse = await fileService.CompressImageAndUploadAsync(
+        var compressedImageResponse = await fileService.CompressImageAndUploadAsync(
             image,
-            screensize.Width,
-            screensize.Height);
-        if (compresedImageResponse.Failure || compresedImageResponse.Data is null)
+            screenSize.Width,
+            screenSize.Height);
+        if (compressedImageResponse.Failure || compressedImageResponse.Data is null)
             return Response<ViewMeasure>.Fail("Не удалось загрузить .ico" + imageResponse.Message,
                 imageResponse.Errors.ToArray());
-        var compresedImage = compresedImageResponse.Data!;
+        var compresedImage = compressedImageResponse.Data!;
 
         return await CreateAsync(new ViewMeasure(displayId, dto.IsDefected, image, compresedImage));
     }
@@ -72,7 +75,7 @@ public class ViewMeasureService(
         if (!Guid.TryParse(id, out var viewMeasureId))
             return "Id не в формате Guid";
          
-        var viewMeasure = await db.FindAsync<ViewMeasure>(viewMeasureId);
+        var viewMeasure = await _db.FindAsync<ViewMeasure>(viewMeasureId);
 
         if (viewMeasure is null)
             return $"View измерения с id-- {viewMeasureId} не существует";
