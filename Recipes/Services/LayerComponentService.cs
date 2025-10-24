@@ -10,11 +10,10 @@ namespace Recipes.Services;
 
 public class LayerComponentService(RecipeDbContext db, ILogger logger) : SimpleService<LayerComponent, RecipeDbContext>(db, logger)
 {
+    private readonly RecipeDbContext _db = db;
+
     public async Task<Response<LayerComponent>> CreateAsync(CreateLayerComponentDto dto)
     {
-        if (string.IsNullOrWhiteSpace(dto.LayerRecipeId))
-            return "Введите id слоя";
-        
         if (string.IsNullOrWhiteSpace(dto.Thickness))
             return "Введите толщину слоя";
 
@@ -23,27 +22,21 @@ public class LayerComponentService(RecipeDbContext db, ILogger logger) : SimpleS
 
         if (string.IsNullOrWhiteSpace(dto.MaterialCodeId))
             return "Введите id кода материала";
-
-        if (!Guid.TryParse(dto.LayerRecipeId, out var layerRecipeId))
-            return "Id слоя не в формате Guid";
+        
         if (!Guid.TryParse(dto.MaterialId, out var materialId))
             return "Id материала не в формате Guid";
         if (!Guid.TryParse(dto.MaterialCodeId, out var materialCodeId))
             return "Id кода материала не в формате Guid";
         
-        var layerRecipe = await db.FindAsync<LayerRecipe>(layerRecipeId);
-        if (layerRecipe == null)
-            return $"Слоя с id-- {layerRecipeId} не существует";
-        
-        var material = await db.FindAsync<Material>(materialId);
+        var material = await _db.FindAsync<Material>(materialId);
         if (material == null)
             return $"Материал с id-- {materialId} не существует";
         
-        var materialCode = await db.FindAsync<MaterialCode>(materialCodeId);
+        var materialCode = await _db.FindAsync<MaterialCode>(materialCodeId);
         if (materialCode == null)
             return $"Кода материала с id-- {materialCodeId} не существует";
         
-        var layerComponent = new LayerComponent(layerRecipe, materialCode, material, dto.Thickness);
+        var layerComponent = new LayerComponent(materialCode, material, dto.Thickness);
         
         return await CreateAsync(layerComponent);
     }
@@ -55,7 +48,7 @@ public class LayerComponentService(RecipeDbContext db, ILogger logger) : SimpleS
         if (!Guid.TryParse(dto.LayerComponentId, out var layerComponentId))
             return "Id компанента слоя не в формате Guid";
         
-        var layerComponent = await db.FindAsync<LayerComponent>(layerComponentId);
+        var layerComponent = await _db.FindAsync<LayerComponent>(layerComponentId);
 
         if (layerComponent == null)
             return $"Компанента слоя с id-- {layerComponentId} не существует"; 
@@ -65,7 +58,7 @@ public class LayerComponentService(RecipeDbContext db, ILogger logger) : SimpleS
             if (!Guid.TryParse(dto.MaterialCodeId, out var materialCodeId))
                 return "Id кода материала не в формате Guid";
         
-            var materialCode = await db.FindAsync<MaterialCode>(materialCodeId);
+            var materialCode = await _db.FindAsync<MaterialCode>(materialCodeId);
             
             if (materialCode == null)
                 return $"Кода материала с id-- {materialCodeId} не существует";
@@ -78,7 +71,7 @@ public class LayerComponentService(RecipeDbContext db, ILogger logger) : SimpleS
             if (!Guid.TryParse(dto.MaterialId, out var materialId))
                 return "Id материала не в формате Guid";
         
-            var material = await db.FindAsync<Material>(materialId);
+            var material = await _db.FindAsync<Material>(materialId);
             
             if (material == null)
                 return $"Материала с id-- {materialId} не существует";
@@ -91,4 +84,5 @@ public class LayerComponentService(RecipeDbContext db, ILogger logger) : SimpleS
         
         return await UpdateAsync(layerComponent);
     }
+    
 }

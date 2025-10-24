@@ -15,4 +15,31 @@ public class RecipeDbContext(DbContextOptions<RecipeDbContext> options)
     public DbSet<LayerRecipe> LayerRecipes => Set<LayerRecipe>();
     public DbSet<LayerComponent> LayerComponents => Set<LayerComponent>();
     public DbSet<BatchRecipe> BatchRecipes => Set<BatchRecipe>();
+    
+    public DbSet<LayerType> LayerTypes => Set<LayerType>();
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<BatchRecipe>()
+            .Navigation(l => l.LayerRecipes)
+            .AutoInclude();
+        
+        modelBuilder.Entity<LayerRecipe>()
+            .Navigation(l => l.LayerComponents)
+            .AutoInclude();
+        modelBuilder.Entity<LayerRecipe>()
+            .Navigation(l => l.Mask)
+            .AutoInclude();
+        modelBuilder.Entity<LayerRecipe>()
+            .Navigation(l => l.LayerType)
+            .AutoInclude();
+
+        modelBuilder.Entity<LayerComponent>()
+            .Navigation(c => c.Material)
+            .AutoInclude();
+        modelBuilder.Entity<LayerComponent>()
+            .Navigation(c => c.MaterialCode)
+            .AutoInclude();
+        
+    }
 }

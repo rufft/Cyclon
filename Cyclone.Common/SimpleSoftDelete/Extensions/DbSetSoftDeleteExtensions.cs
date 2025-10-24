@@ -29,7 +29,7 @@ public static class DbSetSoftDeleteExtensions
         await db.SaveChangesAsync(cancellationToken);;
     }
     
-    public static Task<List<DeleteEntityInfo>> SoftDeleteCascadeAsync<T>(
+    public static Task<List<EntityDeletionInfo>> SoftDeleteCascadeAsync<T>(
         this DbSet<T> set,
         Guid id,
         string? deletedBy = null,
@@ -43,7 +43,7 @@ public static class DbSetSoftDeleteExtensions
         return SoftDeleteCascadeCoreAsync(db, set, id, deletedBy, useTransaction, cancellationToken);
     }
 
-    public static Task<List<DeleteEntityInfo>> SoftDeleteCascadeAsync<T>(
+    public static Task<List<EntityDeletionInfo>> SoftDeleteCascadeAsync<T>(
         this DbSet<T> set,
         T rootEntity,
         string? deletedBy = null,
@@ -58,7 +58,7 @@ public static class DbSetSoftDeleteExtensions
         return SoftDeleteCascadeCoreAsync(db, set, rootEntity, deletedBy, useTransaction, cancellationToken);
     }
 
-    private static async Task<List<DeleteEntityInfo>> SoftDeleteCascadeCoreAsync<T>(
+    private static async Task<List<EntityDeletionInfo>> SoftDeleteCascadeCoreAsync<T>(
         DbContext db,
         DbSet<T> set,
         Guid id,
@@ -72,7 +72,7 @@ public static class DbSetSoftDeleteExtensions
         return await SoftDeleteCascadeCoreAsync(db, set, root, deletedBy, useTransaction, cancellationToken);
     }
 
-    private static async Task<List<DeleteEntityInfo>> SoftDeleteCascadeCoreAsync<T>(
+    private static async Task<List<EntityDeletionInfo>> SoftDeleteCascadeCoreAsync<T>(
         DbContext db,
         DbSet<T> set,
         BaseEntity rootEntity,
@@ -102,7 +102,7 @@ public static class DbSetSoftDeleteExtensions
         });
     }
 
-    private static async Task<List<DeleteEntityInfo>> SoftDeleteRecursiveInternalAsync(
+    private static async Task<List<EntityDeletionInfo>> SoftDeleteRecursiveInternalAsync(
         DbContext db,
         object entityObj,
         string? deletedBy,
@@ -111,7 +111,7 @@ public static class DbSetSoftDeleteExtensions
     {
         if (entityObj is not BaseEntity be || !visited.Add(be.Id)) return [];
 
-        var deleteEntityInfos = new List<DeleteEntityInfo>();
+        var deleteEntityInfos = new List<EntityDeletionInfo>();
 
         if (!be.IsDeleted)
         {
@@ -121,7 +121,7 @@ public static class DbSetSoftDeleteExtensions
             var entry = db.Entry(be);
             if (entry.State == EntityState.Detached) db.Attach(be);
             entry.State = EntityState.Modified;
-            deleteEntityInfos.Add(new DeleteEntityInfo(entry.Entity, be.DeletedBy));
+            deleteEntityInfos.Add(new EntityDeletionInfo(entry.Entity, be.DeletedBy));
         }
 
         var policies = SoftDeletePolicyRegistry.GetPoliciesFor(entityObj.GetType());
@@ -173,7 +173,7 @@ public static class DbSetSoftDeleteExtensions
 
     // ---------------- Restore ----------------
 
-    public static Task<int> RestoreCascadeAsync<T>(
+    public static Task<List<EntityDeletionInfo>> RestoreCascadeAsync<T>(
         this DbSet<T> set,
         Guid id,
         string? restoredBy = null,
@@ -187,7 +187,7 @@ public static class DbSetSoftDeleteExtensions
         return RestoreCascadeCoreAsync(db, set, id, restoredBy, useTransaction, cancellationToken);
     }
 
-    public static Task<int> RestoreCascadeAsync<T>(
+    public static Task<List<EntityDeletionInfo>> RestoreCascadeAsync<T>(
         this DbSet<T> set,
         T rootEntity,
         string? restoredBy = null,
@@ -202,7 +202,7 @@ public static class DbSetSoftDeleteExtensions
         return RestoreCascadeCoreAsync(db, set, rootEntity, restoredBy, useTransaction, cancellationToken);
     }
 
-    private static async Task<int> RestoreCascadeCoreAsync<T>(
+    private static async Task<List<EntityDeletionInfo>> RestoreCascadeCoreAsync<T>(
         DbContext db,
         DbSet<T> set,
         Guid id,
@@ -216,7 +216,7 @@ public static class DbSetSoftDeleteExtensions
         return await RestoreCascadeCoreAsync(db, set, root, restoredBy, useTransaction, cancellationToken);
     }
 
-    private static async Task<int> RestoreCascadeCoreAsync<T>(
+    private static async Task<List<EntityDeletionInfo>> RestoreCascadeCoreAsync<T>(
         DbContext db,
         DbSet<T> set,
         BaseEntity rootEntity,
@@ -245,17 +245,16 @@ public static class DbSetSoftDeleteExtensions
         });
     }
 
-    private static async Task<int> RestoreRecursiveInternalAsync(
+    private static async Task<List<EntityDeletionInfo>> RestoreRecursiveInternalAsync(
         DbContext db,
         object entityObj,
         string? restoredBy,
         HashSet<Guid> visited,
         CancellationToken cancellationToken)
     {
-        if (entityObj is not BaseEntity be) return 0;
-        if (!visited.Add(be.Id)) return 0;
+        if (entityObj is not BaseEntity be || !visited.Add(be.Id)) return [];
 
-        var restored = 0;
+        List<EntityDeletionInfo> restored = [];
         if (be.IsDeleted)
         {
             be.IsDeleted = false;
@@ -264,7 +263,7 @@ public static class DbSetSoftDeleteExtensions
             var entry = db.Entry(be);
             if (entry.State == EntityState.Detached) db.Attach(be);
             entry.State = EntityState.Modified;
-            restored++;
+            restored.Add(new EntityDeletionInfo(entry.Entity, restoredBy));
         }
 
         var policies = SoftDeletePolicyRegistry.GetPoliciesFor(entityObj.GetType());
@@ -284,7 +283,9 @@ public static class DbSetSoftDeleteExtensions
                 {
                     if (!nav.ChildType.IsInstanceOfType(childBase)) continue;
                     if (nav.Predicate != null && !nav.Predicate(childBase)) continue;
-                    restored += await RestoreRecursiveInternalAsync(db, childBase, restoredBy, visited, cancellationToken);
+                    var res = await RestoreRecursiveInternalAsync(db, childBase, restoredBy, visited,
+                        cancellationToken);
+                    restored.AddRange(res);
                 }
             }
             else
@@ -298,7 +299,8 @@ public static class DbSetSoftDeleteExtensions
                 if (child == null) continue;
                 if (!nav.ChildType.IsInstanceOfType(child)) continue;
                 if (nav.Predicate != null && !nav.Predicate(child)) continue;
-                restored += await RestoreRecursiveInternalAsync(db, child, restoredBy, visited, cancellationToken);
+                var res = await RestoreRecursiveInternalAsync(db, child, restoredBy, visited, cancellationToken);
+                restored.AddRange(res);
             }
         }
 

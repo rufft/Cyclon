@@ -256,7 +256,8 @@
           }
         },
         "build": {
-          "build/_._": {}
+          "build/HotChocolate.Data.props": {},
+          "build/HotChocolate.Data.targets": {}
         }
       },
       "HotChocolate.Execution/16.0.0-p.8.18": {
@@ -1944,7 +1945,7 @@
           }
         }
       },
-      "Serilog.Sinks.Console/6.0.1-dev-00953": {
+      "Serilog.Sinks.Console/6.0.0": {
         "type": "package",
         "dependencies": {
           "Serilog": "4.0.0"
@@ -2518,33 +2519,6 @@
         "build": {
           "buildTransitive/net8.0/Yarp.ReverseProxy.targets": {}
         }
-      },
-      "Batch/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v9.0",
-        "dependencies": {
-          "Cyclone.Common": "1.0.0",
-          "HotChocolate": "16.0.0-p.8.18",
-          "HotChocolate.Abstractions": "16.0.0-p.8.18",
-          "HotChocolate.AspNetCore": "16.0.0-p.8.18",
-          "HotChocolate.Data": "16.0.0-p.8.18",
-          "HotChocolate.Types": "16.0.0-p.8.18",
-          "Microsoft.AspNetCore.OpenApi": "9.0.8",
-          "Npgsql.EntityFrameworkCore.PostgreSQL": "9.0.4",
-          "Serilog": "4.3.1-dev-02387",
-          "Serilog.Sinks.Console": "6.0.1-dev-00953",
-          "Serilog.Sinks.File": "7.0.0",
-          "Serilog.Sinks.PostgreSQL": "2.3.0"
-        },
-        "compile": {
-          "bin/placeholder/Batch.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/Batch.dll": {}
-        },
-        "frameworkReferences": [
-          "Microsoft.AspNetCore.App"
-        ]
       },
       "Cyclone.Common/1.0.0": {
         "type": "project",
@@ -5587,10 +5561,10 @@
         "serilog.sinks.async.nuspec"
       ]
     },
-    "Serilog.Sinks.Console/6.0.1-dev-00953": {
-      "sha512": "Goi2B0Je0X0NvWYUi0SiU9MJNF2957Kfjmc6VPZ2hNl6Lmj9he6laxmDuQU/c0fBdAFnNiEUPPcHd/NJVyfbkA==",
+    "Serilog.Sinks.Console/6.0.0": {
+      "sha512": "fQGWqVMClCP2yEyTXPIinSr5c+CBGUvBybPxjAGcf7ctDhadFhrQw03Mv8rJ07/wR5PDfFjewf2LimvXCDzpbA==",
       "type": "package",
-      "path": "serilog.sinks.console/6.0.1-dev-00953",
+      "path": "serilog.sinks.console/6.0.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -5606,7 +5580,7 @@
         "lib/net8.0/Serilog.Sinks.Console.xml",
         "lib/netstandard2.0/Serilog.Sinks.Console.dll",
         "lib/netstandard2.0/Serilog.Sinks.Console.xml",
-        "serilog.sinks.console.6.0.1-dev-00953.nupkg.sha512",
+        "serilog.sinks.console.6.0.0.nupkg.sha512",
         "serilog.sinks.console.nuspec"
       ]
     },
@@ -7240,11 +7214,6 @@
         "yarp.reverseproxy.nuspec"
       ]
     },
-    "Batch/1.0.0": {
-      "type": "project",
-      "path": "../Batch/Batch.csproj",
-      "msbuildProject": "../Batch/Batch.csproj"
-    },
     "Cyclone.Common/1.0.0": {
       "type": "project",
       "path": "../Cyclone.Common/Cyclone.Common.csproj",
@@ -7253,11 +7222,12 @@
   },
   "projectFileDependencyGroups": {
     "net9.0": [
-      "Batch >= 1.0.0",
       "Cyclone.Common >= 1.0.0",
+      "HotChocolate.Data >= 16.0.0-p.8.18",
       "Microsoft.AspNetCore.OpenApi >= 9.0.8",
       "Microsoft.EntityFrameworkCore.Design >= 9.0.8",
-      "Microsoft.Extensions.DependencyInjection >= 9.0.8"
+      "Microsoft.Extensions.DependencyInjection >= 9.0.8",
+      "Npgsql.EntityFrameworkCore.PostgreSQL >= 9.0.4"
     ]
   },
   "packageFolders": {
@@ -7285,9 +7255,6 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "C:\\Users\\Student\\RiderProjects\\Cyclon\\Batch\\Batch.csproj": {
-              "projectPath": "C:\\Users\\Student\\RiderProjects\\Cyclon\\Batch\\Batch.csproj"
-            },
             "C:\\Users\\Student\\RiderProjects\\Cyclon\\Cyclone.Common\\Cyclone.Common.csproj": {
               "projectPath": "C:\\Users\\Student\\RiderProjects\\Cyclon\\Cyclone.Common\\Cyclone.Common.csproj"
             }
@@ -7310,6 +7277,10 @@
       "net9.0": {
         "targetAlias": "net9.0",
         "dependencies": {
+          "HotChocolate.Data": {
+            "target": "Package",
+            "version": "[16.0.0-p.8.18, )"
+          },
           "Microsoft.AspNetCore.OpenApi": {
             "target": "Package",
             "version": "[9.0.8, )"
@@ -7323,6 +7294,10 @@
           "Microsoft.Extensions.DependencyInjection": {
             "target": "Package",
             "version": "[9.0.8, )"
+          },
+          "Npgsql.EntityFrameworkCore.PostgreSQL": {
+            "target": "Package",
+            "version": "[9.0.4, )"
           }
         },
         "imports": [

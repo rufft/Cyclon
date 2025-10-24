@@ -12,9 +12,9 @@ public class SimpleClient(HttpClient http)
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase
     };
     
-    public async Task<Response<Guid?>> GetIdByIdAsync<T>(Guid id, CancellationToken? ct = null) where T : BaseEntity
+    public async Task<Response<Guid?>> GetIdByIdAsync(string entityTypeName, Guid id, CancellationToken? ct = null)
     {
-        var typeName  = typeof(T).Name.ToCamelCase();
+        var typeName  = entityTypeName.ToCamelCase();
         var fieldName = $"{typeName}ById";
         var queryText = 
             $$"""
@@ -181,6 +181,4 @@ public class SimpleClient(HttpClient http)
 }
 
 public record GraphQlError(string Message);
-public record DisplayDto(Guid Id);
-public record GetByIdData(Guid? GetDisplayById);
 public record GraphQlResponse<T>(T? Data, GraphQlError[]? Errors);

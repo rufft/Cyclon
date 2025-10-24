@@ -9,29 +9,18 @@ namespace Recipes.Services;
 
 public class MaterialCodeService(RecipeDbContext db, ILogger logger) : SimpleService<MaterialCode, RecipeDbContext>(db, logger)
 {
+    private readonly RecipeDbContext _db = db;
+
     public async Task<Response<MaterialCode>> CreateAsync(string name, string? description = null)
     {
         if (string.IsNullOrWhiteSpace(name))
             return "Введите имя";
-
+        
+        if (_db.MaterialCodes.Any(x => x.Name == name))
+            return "Код материала с таким именем уже существует";
         var materialCode = new MaterialCode(name, description);
 
         return await CreateAsync(materialCode);
     }
-
-    public async Task<Response<List<DeleteEntityInfo>>> DeleteAsync(string id)
-    {
-        if (string.IsNullOrWhiteSpace(id))
-            return "Введите id";
-
-        if (!Guid.TryParse(id, out var materialCodeId))
-            return "Id не в формате Guid";
-        
-        var materialCode = await db.FindAsync<MaterialCode>(materialCodeId);
-
-        if (materialCode == null)
-            return $"Код материала с id-- {materialCodeId} не существует";
-        
-        return await SoftDeleteAsync(materialCode);
-    }
+    
 }

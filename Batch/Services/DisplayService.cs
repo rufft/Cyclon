@@ -10,7 +10,7 @@ namespace Batch.Services;
 
 public class DisplayService(BatchDbContext db, ILogger logger) : SimpleService<Display, BatchDbContext>(db, logger)
 {
-    public async Task<Response<List<DeleteEntityInfo>>> SoftDeleteDisplayAsync(string id)
+    public async Task<Response<List<EntityDeletionInfo>>> SoftDeleteDisplayAsync(string id)
     {
         if (!Guid.TryParse(id, out var displayId))
             return "Id имеет неверный формат GUID.";
@@ -22,7 +22,7 @@ public class DisplayService(BatchDbContext db, ILogger logger) : SimpleService<D
         return await SoftDeleteAsync(display);
     }
 
-    public async Task<Response<int>> RestoreDisplayAsync(string id)
+    public async Task<Response<List<EntityDeletionInfo>>> RestoreDisplayAsync(string id)
     {
         if (!Guid.TryParse(id, out var displayId))
             return "Id имеет неверный формат GUID.";

@@ -66,7 +66,7 @@ public class SimpleService<TEntity, TDbContext>(
         }
     }
 
-    protected async Task<Response<List<DeleteEntityInfo>>> SoftDeleteAsync(TEntity entity)
+    protected async Task<Response<List<EntityDeletionInfo>>> SoftDeleteAsync(TEntity entity)
     {
         using var _ = LogContext.PushProperty("EntityType", typeof(TEntity).Name);
         using var __ = LogContext.PushProperty("EntityId", entity.Id);
@@ -86,7 +86,7 @@ public class SimpleService<TEntity, TDbContext>(
                 logger.Information(
                     "Successfully soft deleted entity {EntityType} with ID {EntityId}. Cascade deleted {DeletedCount} related entities",
                     typeof(TEntity).Name, entity.Id, deletedCount.Count);
-                return Response<List<DeleteEntityInfo>>.Ok(deletedCount);
+                return Response<List<EntityDeletionInfo>>.Ok(deletedCount);
             }
             catch (DbUpdateException ex)
             {
@@ -97,7 +97,7 @@ public class SimpleService<TEntity, TDbContext>(
         });
     }
 
-protected async Task<Response<int>> RestoreAsync(TEntity entity)
+    protected async Task<Response<List<EntityDeletionInfo>>> RestoreAsync(TEntity entity)
     {
         using var _ = LogContext.PushProperty("EntityType", typeof(TEntity).Name);
         using var __ = LogContext.PushProperty("EntityId", entity.Id);
@@ -116,7 +116,7 @@ protected async Task<Response<int>> RestoreAsync(TEntity entity)
                 logger.Information(
                     "Successfully restore entity {EntityType} with ID {EntityId}. Cascade restore {RestoreCount} related entities",
                     typeof(TEntity).Name, entity.Id, restoredEntities);
-                return Response<int>.Ok(restoredEntities);
+                return Response<List<EntityDeletionInfo>>.Ok(restoredEntities);
             }
             catch (DbUpdateException ex)
             {
@@ -126,4 +126,15 @@ protected async Task<Response<int>> RestoreAsync(TEntity entity)
             }
         });
     }
+
+    public async Task<Response<List<EntityDeletionInfo>>> DeleteAsync(string? id)
+    {
+        var findResult = await Db.FindByStringAsync<TEntity>(id);
+        if (findResult.Failure)
+            return Response<List<EntityDeletionInfo>>.Fail(findResult.Message, findResult.Errors.ToArray());
+        var entity = findResult.Data!;
+        
+        return await SoftDeleteAsync(entity);
+    }
+    
 }

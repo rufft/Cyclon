@@ -19,7 +19,7 @@ public class Mutation([Service] MeasureDbContext db)
     public async Task<Response<CieMeasure>> UpdateCieMeasureAsync(
         [Service] CieMeasureService cieMeasureService, UpdateCieMeasureDto input) 
         => await cieMeasureService.UpdateAsync(input);
-    public async Task<Response<List<DeleteEntityInfo>>> DeleteCieMeasureAsync(
+    public async Task<Response<List<EntityDeletionInfo>>> DeleteCieMeasureAsync(
         [Service] CieMeasureService cieMeasureService, [Required] string? id)
         => await cieMeasureService.DeleteAsync(id);
 
@@ -30,7 +30,7 @@ public class Mutation([Service] MeasureDbContext db)
     public async Task<Response<PowerMeasure>> UpdatePowerMeasureAsync(
         [Service] PowerMeasureService powerMeasureService, UpdatePowerMeasureDto input)
         => await powerMeasureService.UpdateAsync(input);
-    public async Task<Response<List<DeleteEntityInfo>>> DeletePowerMeasureAsync(
+    public async Task<Response<List<EntityDeletionInfo>>> DeletePowerMeasureAsync(
         [Service] PowerMeasureService powerMeasureService, [Required] string? id) 
         => await powerMeasureService.DeleteAsync(id);
 
@@ -38,7 +38,7 @@ public class Mutation([Service] MeasureDbContext db)
     public async Task<Response<ViewMeasure>> CreateViewMeasureAsync(
         [Service] ViewMeasureService viewMeasureService, CreateViewMeasureDto input)
     => await viewMeasureService.CreateAsync(input);
-    public async Task<Response<List<DeleteEntityInfo>>> DeleteViewMeasureAsync(
+    public async Task<Response<List<EntityDeletionInfo>>> DeleteViewMeasureAsync(
         [Service] ViewMeasureService viewMeasureService, [Required] string? id) 
         => await viewMeasureService.DeleteAsync(id);
 }

@@ -6,12 +6,12 @@ public class BatchRecipe : BaseEntity
 {
     private BatchRecipe() { }
     
-    public BatchRecipe(Guid batchId, string substrate, List<LayerRecipe> layerRecipes, string? glassId = null, string? description = null)
+    public BatchRecipe(Guid batchId, string substrate, List<LayerRecipe> layerRecipes, string? glassSerialNumber = null, string? description = null)
     {
         BatchId = batchId;
         Substrate = substrate;
         LayerRecipes = layerRecipes;
-        GlassId = glassId;
+        GlassSerialNumber = glassSerialNumber;
         Description = description;
     }
 
@@ -19,7 +19,7 @@ public class BatchRecipe : BaseEntity
     
     public string Substrate { get; set; }
     
-    public string? GlassId { get; set; }
+    public string? GlassSerialNumber { get; set; }
     
     public List<LayerRecipe> LayerRecipes { get; set; }
     

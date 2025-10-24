@@ -8,11 +8,12 @@
     ".NETCoreApp,Version=v9.0": {
       "Measurement/1.0.0": {
         "dependencies": {
-          "Batch": "1.0.0",
           "Cyclone.Common": "1.0.0",
+          "HotChocolate.Data": "16.0.0-p.8.18",
           "Microsoft.AspNetCore.OpenApi": "9.0.8",
           "Microsoft.EntityFrameworkCore.Design": "9.0.8",
-          "Microsoft.Extensions.DependencyInjection": "9.0.8"
+          "Microsoft.Extensions.DependencyInjection": "9.0.8",
+          "Npgsql.EntityFrameworkCore.PostgreSQL": "9.0.4"
         },
         "runtime": {
           "Measurement.dll": {}
@@ -1264,7 +1265,7 @@
           "Serilog.Extensions.Hosting": "9.0.0",
           "Serilog.Formatting.Compact": "3.0.0",
           "Serilog.Settings.Configuration": "9.0.0",
-          "Serilog.Sinks.Console": "6.0.1-dev-00953",
+          "Serilog.Sinks.Console": "6.0.0",
           "Serilog.Sinks.Debug": "3.0.0",
           "Serilog.Sinks.File": "7.0.0"
         },
@@ -1370,14 +1371,14 @@
           }
         }
       },
-      "Serilog.Sinks.Console/6.0.1-dev-00953": {
+      "Serilog.Sinks.Console/6.0.0": {
         "dependencies": {
           "Serilog": "4.3.1-dev-02387"
         },
         "runtime": {
           "lib/net8.0/Serilog.Sinks.Console.dll": {
-            "assemblyVersion": "6.0.1.0",
-            "fileVersion": "6.0.1.0"
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.0.0"
           }
         }
       },
@@ -1640,28 +1641,6 @@
           "lib/net8.0/Yarp.ReverseProxy.dll": {
             "assemblyVersion": "2.3.0.0",
             "fileVersion": "2.300.25.12702"
-          }
-        }
-      },
-      "Batch/1.0.0": {
-        "dependencies": {
-          "Cyclone.Common": "1.0.0",
-          "HotChocolate": "16.0.0-p.8.18",
-          "HotChocolate.Abstractions": "16.0.0-p.8.18",
-          "HotChocolate.AspNetCore": "16.0.0-p.8.18",
-          "HotChocolate.Data": "16.0.0-p.8.18",
-          "HotChocolate.Types": "16.0.0-p.8.18",
-          "Microsoft.AspNetCore.OpenApi": "9.0.8",
-          "Npgsql.EntityFrameworkCore.PostgreSQL": "9.0.4",
-          "Serilog": "4.3.1-dev-02387",
-          "Serilog.Sinks.Console": "6.0.1-dev-00953",
-          "Serilog.Sinks.File": "7.0.0",
-          "Serilog.Sinks.PostgreSQL": "2.3.0"
-        },
-        "runtime": {
-          "Batch.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
           }
         }
       },
@@ -2393,12 +2372,12 @@
       "path": "serilog.sinks.async/2.1.0",
       "hashPath": "serilog.sinks.async.2.1.0.nupkg.sha512"
     },
-    "Serilog.Sinks.Console/6.0.1-dev-00953": {
+    "Serilog.Sinks.Console/6.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-Goi2B0Je0X0NvWYUi0SiU9MJNF2957Kfjmc6VPZ2hNl6Lmj9he6laxmDuQU/c0fBdAFnNiEUPPcHd/NJVyfbkA==",
-      "path": "serilog.sinks.console/6.0.1-dev-00953",
-      "hashPath": "serilog.sinks.console.6.0.1-dev-00953.nupkg.sha512"
+      "sha512": "sha512-fQGWqVMClCP2yEyTXPIinSr5c+CBGUvBybPxjAGcf7ctDhadFhrQw03Mv8rJ07/wR5PDfFjewf2LimvXCDzpbA==",
+      "path": "serilog.sinks.console/6.0.0",
+      "hashPath": "serilog.sinks.console.6.0.0.nupkg.sha512"
     },
     "Serilog.Sinks.Debug/3.0.0": {
       "type": "package",
@@ -2644,11 +2623,6 @@
       "sha512": "sha512-gxtkN3a+9biu9V9Zd5NaTO6VZWXAnS2mhQ0R/VXmSPoTuiQNZsakKikrKpDtKxrL5nUYzbRsHtl40WNq+ZBKKg==",
       "path": "yarp.reverseproxy/2.3.0",
       "hashPath": "yarp.reverseproxy.2.3.0.nupkg.sha512"
-    },
-    "Batch/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
     },
     "Cyclone.Common/1.0.0": {
       "type": "project",

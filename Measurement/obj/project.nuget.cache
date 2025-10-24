@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "I7udhCvPvnI=",
+  "dgSpecHash": "C9dikNeg0A0=",
   "success": true,
   "projectFilePath": "C:\\Users\\Student\\RiderProjects\\Cyclon\\Measurement\\Measurement.csproj",
   "expectedPackageFiles": [
@@ -103,7 +103,7 @@
     "C:\\Users\\Student\\.nuget\\packages\\serilog.formatting.compact\\3.0.0\\serilog.formatting.compact.3.0.0.nupkg.sha512",
     "C:\\Users\\Student\\.nuget\\packages\\serilog.settings.configuration\\9.0.0\\serilog.settings.configuration.9.0.0.nupkg.sha512",
     "C:\\Users\\Student\\.nuget\\packages\\serilog.sinks.async\\2.1.0\\serilog.sinks.async.2.1.0.nupkg.sha512",
-    "C:\\Users\\Student\\.nuget\\packages\\serilog.sinks.console\\6.0.1-dev-00953\\serilog.sinks.console.6.0.1-dev-00953.nupkg.sha512",
+    "C:\\Users\\Student\\.nuget\\packages\\serilog.sinks.console\\6.0.0\\serilog.sinks.console.6.0.0.nupkg.sha512",
     "C:\\Users\\Student\\.nuget\\packages\\serilog.sinks.debug\\3.0.0\\serilog.sinks.debug.3.0.0.nupkg.sha512",
     "C:\\Users\\Student\\.nuget\\packages\\serilog.sinks.file\\7.0.0\\serilog.sinks.file.7.0.0.nupkg.sha512",
     "C:\\Users\\Student\\.nuget\\packages\\serilog.sinks.periodicbatching\\2.3.0\\serilog.sinks.periodicbatching.2.3.0.nupkg.sha512",

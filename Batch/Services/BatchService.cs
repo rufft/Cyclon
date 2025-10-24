@@ -69,7 +69,7 @@ public class BatchService(BatchDbContext db, ILogger logger) : SimpleService<Mod
         return await UpdateAsync(batch);
     }
 
-    public async Task<Response<List<DeleteEntityInfo>>> SoftDeleteBatchAsync(string id)
+    public async Task<Response<List<EntityDeletionInfo>>> SoftDeleteBatchAsync(string id)
     {
         if (!Guid.TryParse(id, out var batchId))
             return "Id имеет неверный формат GUID.";
@@ -81,7 +81,7 @@ public class BatchService(BatchDbContext db, ILogger logger) : SimpleService<Mod
         return await SoftDeleteAsync(batch);
     }
 
-    public async Task<Response<int>> RestoreBatchAsync(string id)
+    public async Task<Response<List<EntityDeletionInfo>>> RestoreBatchAsync(string id)
     {
         if (!Guid.TryParse(id, out var batchId))
             return "Id имеет неверный формат GUID.";

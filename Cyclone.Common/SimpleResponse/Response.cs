@@ -1,4 +1,6 @@
-﻿namespace Cyclone.Common.SimpleResponse;
+﻿using Cyclone.Common.SimpleEntity;
+
+namespace Cyclone.Common.SimpleResponse;
 
 public class Response<T>
 {
@@ -13,12 +15,14 @@ public class Response<T>
 
     public static Response<T> Fail(string? message = null, params string[]? errors) =>
         new() { Success = false, Failure = true, Message = message, Errors = (errors ?? []).ToList() };
-
+    
+    public static Response<T> Fail(string? message, IEnumerable<string>? errors) =>
+        new() { Success = false, Failure = true, Message = message, Errors = (errors ?? []).ToList() };
 
     public static implicit operator Response<T>(T data) => Ok(data);
 
     public static implicit operator Response<T>(string errorMessage) => Fail(errorMessage);
-
+    
     public static implicit operator Response<T>(Exception ex) => Fail(ex.Message);
 
     public static implicit operator Response<T>((T data, string message) tuple) =>

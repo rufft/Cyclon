@@ -1,10 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Batch.Models.Displays;
 using Cyclone.Common.SimpleClient;
 using Cyclone.Common.SimpleResponse;
 using Cyclone.Common.SimpleService;
 using Cyclone.Common.SimpleSoftDelete;
-using HotChocolate.Types.Composite;
 using Measurement.Context;
 using Measurement.Dto;
 using Measurement.Models.MeasureTypes;
@@ -30,7 +28,7 @@ public class PowerMeasureService(
         if (!Guid.TryParse(dto.DisplayId, out var expectedDisplayId))
             return $"Id не в формате Guid ({dto.DisplayId})";
 
-        var response = await client.GetIdByIdAsync<Display>(expectedDisplayId);
+        var response = await client.GetIdByIdAsync("Display", expectedDisplayId);
 
         if (response.Failure)
             return Response<PowerMeasure>.Fail(message: response.Message, errors: response.Errors.ToArray());
@@ -70,7 +68,7 @@ public class PowerMeasureService(
         return await UpdateAsync(powerMeasure);
     }
 
-    public async Task<Response<List<DeleteEntityInfo>>> DeleteAsync([Required] string? id)
+    public async Task<Response<List<EntityDeletionInfo>>> DeleteAsync([Required] string? id)
     {
         if (id == null)
             return "Введите Id";

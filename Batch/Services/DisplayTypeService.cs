@@ -94,7 +94,7 @@ public class DisplayTypeService(BatchDbContext db, ILogger logger) : SimpleServi
         return await UpdateAsync(displayType);
     }
 
-    public async Task<Response<List<DeleteEntityInfo>>> SoftDeleteDisplayTypeAsync(string id)
+    public async Task<Response<List<EntityDeletionInfo>>> SoftDeleteDisplayTypeAsync(string id)
     {
         if (!Guid.TryParse(id, out var displayTypeId))
             return "Id имеет неверный формат GUID.";
@@ -106,7 +106,7 @@ public class DisplayTypeService(BatchDbContext db, ILogger logger) : SimpleServi
         return await SoftDeleteAsync(displayType);
     }
 
-    public async Task<Response<int>> RestoreDisplayTypeAsync(string id)
+    public async Task<Response<List<EntityDeletionInfo>>> RestoreDisplayTypeAsync(string id)
     {
         if (!Guid.TryParse(id, out var displayTypeId))
             return "Id имеет неверный формат GUID.";

@@ -38,12 +38,12 @@ public class Mutation
         return await _batchService.UpdateBatchAsync(input);
     }
     
-    public async Task<Response<List<DeleteEntityInfo>>> SoftDeleteBatchAsync(string batchId)
+    public async Task<Response<List<EntityDeletionInfo>>> SoftDeleteBatchAsync(string batchId)
     {
         return await _batchService.SoftDeleteBatchAsync(batchId);
     }
     
-    public async Task<Response<int>> RestoreBatchAsync(string batchId)
+    public async Task<Response<List<EntityDeletionInfo>>> RestoreBatchAsync(string batchId)
     {
         return await _batchService.RestoreBatchAsync(batchId);
     }
@@ -59,23 +59,23 @@ public class Mutation
         return await _displayTypeService.UpdateDisplayTypeAsync(input);
     }
 
-    public async Task<Response<List<DeleteEntityInfo>>> SoftDeleteDisplayTypeAsync(string displayTypeId)
+    public async Task<Response<List<EntityDeletionInfo>>> SoftDeleteDisplayTypeAsync(string displayTypeId)
     {
         return await _displayTypeService.SoftDeleteDisplayTypeAsync(displayTypeId);
     }
     
-    public async Task<Response<int>> RestoreDisplayTypeAsync(string displayTypeId)
+    public async Task<Response<List<EntityDeletionInfo>>> RestoreDisplayTypeAsync(string displayTypeId)
     {
         return await _displayTypeService.RestoreDisplayTypeAsync(displayTypeId);
     }
     
     // ==== Display ====
-    public async Task<Response<List<DeleteEntityInfo>>> SoftDeleteDisplayAsync(string displayTypeId)
+    public async Task<Response<List<EntityDeletionInfo>>> SoftDeleteDisplayAsync(string displayTypeId)
     {
         return await _displayService.SoftDeleteDisplayAsync(displayTypeId);
     }
     
-    public async Task<Response<int>> RestoreDisplayAsync(string displayTypeId)
+    public async Task<Response<List<EntityDeletionInfo>>> RestoreDisplayAsync(string displayTypeId)
     {
         return await _displayService.RestoreDisplayAsync(displayTypeId);
     }

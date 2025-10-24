@@ -1,11 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Globalization;
-using Batch.Models.Displays;
 using Cyclone.Common.SimpleClient;
 using Cyclone.Common.SimpleResponse;
 using Cyclone.Common.SimpleService;
 using Cyclone.Common.SimpleSoftDelete;
-using HotChocolate.Types.Composite;
 using Measurement.Context;
 using Measurement.Dto;
 using Measurement.Models.MeasureTypes;
@@ -33,7 +30,7 @@ public class ViewMeasureService(
     {
         if (!Guid.TryParse(dto.DisplayId, out var displayId))
             return "Id не в формате Guid";
-        var displayResponse = await client.GetIdByIdAsync<Display>(displayId);
+        var displayResponse = await client.GetIdByIdAsync("Display", displayId);
         if (displayResponse.Failure)
             return "Не удалось получить дисплей по id";
         
@@ -68,7 +65,7 @@ public class ViewMeasureService(
         return await CreateAsync(new ViewMeasure(displayId, dto.IsDefected, image, compresedImage));
     }
     
-    public async Task<Response<List<DeleteEntityInfo>>> DeleteAsync([Required] string? id)
+    public async Task<Response<List<EntityDeletionInfo>>> DeleteAsync([Required] string? id)
     {
         if (id == null)
             return "Введите Id";

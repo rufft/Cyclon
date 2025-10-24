@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Text;
 using Cyclone.Common.SimpleDatabase.FileSystem;
 using Cyclone.Common.SimpleEntity;
+using Cyclone.Common.SimpleResponse;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -54,6 +55,49 @@ public class SimpleDbContext(DbContextOptions options,
     }
 
     protected virtual void ConfigureDomainModel(ModelBuilder modelBuilder) { }
+
+    public async Task<Response<TEntity>> FindByStringAsync<TEntity>(string? id) where TEntity : BaseEntity
+    {
+        var response = TryParseStringToGuidResponse(id);
+        
+        if (response.Failure)
+            return Response<TEntity>.Fail(response.Message, response.Errors.ToArray());
+        
+        var guidId = response.Data;
+        
+        var entity = await FindAsync<TEntity>(guidId);
+        if (entity == null)
+            return $"{typeof(TEntity)} с id-- {guidId} не существует";
+        
+        return entity;
+    }
+
+    public static Response<Guid> TryParseStringToGuidResponse(string? id)
+    {
+        if (string.IsNullOrWhiteSpace(id))
+            return Response<Guid>.Fail("Введите id");
+        return !Guid.TryParse(id, out var guidId) 
+            ? Response<Guid>.Fail("Id не в формате Guid") 
+            : Response<Guid>.Ok(guidId);
+    } 
+    
+    public async Task<Response<TEntity?>> FindNullableByStringAsync<TEntity>(string? id) where TEntity : BaseEntity
+    {
+        if (id == null)
+            return Response<TEntity?>.Ok(null);
+        
+        if (string.IsNullOrWhiteSpace(id))
+            return "Введите id";
+        
+        if (!Guid.TryParse(id, out var guidId))
+            return "Id не в формате Guid";
+        
+        var entity = await FindAsync<TEntity>(guidId);
+        if (entity == null)
+            return $"{typeof(TEntity)} с id-- {guidId} не существует";
+        
+        return entity;
+    }
 
     private void RegisterEntityTypes(ModelBuilder modelBuilder)
     {

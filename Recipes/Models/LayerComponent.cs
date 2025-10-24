@@ -6,9 +6,8 @@ public class LayerComponent : BaseEntity
 {
     private LayerComponent() { }
     
-    public LayerComponent(LayerRecipe layerRecipe, MaterialCode materialCode, Material material, string thickness)
+    public LayerComponent(MaterialCode materialCode, Material material, string thickness)
     {
-        LayerRecipe = layerRecipe;
         MaterialCode = materialCode;
         Material = material;
         Thickness = thickness;
@@ -18,5 +17,5 @@ public class LayerComponent : BaseEntity
     public Material Material { get; set; }
     public string Thickness { get; set; }
     
-    public LayerRecipe LayerRecipe { get; set; }
+    public LayerRecipe? LayerRecipe { get; set; }
 }
