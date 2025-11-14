@@ -1,4 +1,5 @@
-﻿using Cyclone.Common.SimpleDatabase;
+﻿using System.Text.Json;
+using Cyclone.Common.SimpleDatabase;
 using Microsoft.EntityFrameworkCore;
 using Recipes.Models;
 
@@ -18,6 +19,11 @@ public class RecipeDbContext(DbContextOptions<RecipeDbContext> options)
     
     public DbSet<LayerType> LayerTypes => Set<LayerType>();
 
+    protected override void ConfigureDomainModel(ModelBuilder modelBuilder)
+    {
+        var jsonOptions = new JsonSerializerOptions
+            { PropertyNamingPolicy = null, WriteIndented = false };
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<BatchRecipe>()

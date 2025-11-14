@@ -147,7 +147,7 @@ public class SimpleDbContext(DbContextOptions options,
         {
             var clr = et.ClrType;
 
-            var isDeletedProp = clr.GetProperty("IsDeleted");
+            var isDeletedProp = clr.GetProperty(nameof(BaseEntity.IsDeleted));
             if (isDeletedProp == null || isDeletedProp.PropertyType != typeof(bool)) continue;
 
             var parameter = Expression.Parameter(clr, "e");
@@ -156,12 +156,49 @@ public class SimpleDbContext(DbContextOptions options,
                 .GetMethod(nameof(EF.Property), BindingFlags.Public | BindingFlags.Static)!
                 .MakeGenericMethod(typeof(bool));
 
-            var propertyAccess = Expression.Call(efProperty, parameter, Expression.Constant("IsDeleted"));
+            var propertyAccess = Expression.Call(efProperty, parameter, Expression.Constant(nameof(BaseEntity.IsDeleted)));
             var body = Expression.Equal(propertyAccess, Expression.Constant(false));
             var lambda = Expression.Lambda(body, parameter);
 
             modelBuilder.Entity(clr).HasQueryFilter(lambda);
         }
+    }
+    private static DateTime ToUtcKind(DateTime dt) =>
+        dt.Kind == DateTimeKind.Utc ? dt : DateTime.SpecifyKind(dt.ToUniversalTime(), DateTimeKind.Utc);
+
+    
+    private void EnsureDateTimesAreUtc()
+    {
+        foreach (var entry in ChangeTracker.Entries())
+        {
+            if (entry.State is not (EntityState.Added or EntityState.Modified)) continue;
+            
+            foreach (var prop in entry.Properties)
+            {
+                if (prop.Metadata.ClrType == typeof(DateTime))
+                {
+                    if (prop.CurrentValue is DateTime dt)
+                        prop.CurrentValue = ToUtcKind(dt);
+                }
+                else if (prop.Metadata.ClrType == typeof(DateTime?))
+                {
+                    if (prop.CurrentValue is DateTime ndt)
+                        prop.CurrentValue = ToUtcKind(ndt);
+                }
+            }
+        }
+    }
+
+    public override int SaveChanges()
+    {
+        EnsureDateTimesAreUtc();
+        return base.SaveChanges();
+    }
+
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        EnsureDateTimesAreUtc();
+        return await base.SaveChangesAsync(cancellationToken);
     }
     
     private static IEnumerable<Type> GetTypesSafe(Assembly asm)

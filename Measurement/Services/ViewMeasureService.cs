@@ -5,6 +5,7 @@ using Cyclone.Common.SimpleService;
 using Cyclone.Common.SimpleSoftDelete;
 using Measurement.Context;
 using Measurement.Dto;
+using Measurement.GraphQL;
 using Measurement.Models.MeasureTypes;
 using ILogger = Serilog.ILogger;
 
@@ -17,14 +18,6 @@ public class ViewMeasureService(
     ILogger logger) : SimpleService<ViewMeasure, MeasureDbContext>(db, logger)
 {
     private readonly MeasureDbContext _db = db;
-
-    private const string ScreenSizeQuery = """
-                                           query ($id: UUID!) {
-                                             displayById(id: $id) {
-                                               displayType { screenSize { height width } }
-                                             }
-                                           }
-                                           """;
     
     public async Task<Response<ViewMeasure>> CreateAsync(CreateViewMeasureDto dto)
     {
@@ -38,7 +31,7 @@ public class ViewMeasureService(
             return await CreateAsync(new ViewMeasure(displayId, dto.IsDefected));
 
         var screenSizeResponse = await client.ExecutePathAsync<SizeDto>(
-            ScreenSizeQuery,
+            QueryTemplates.ScreenSizeQuery,
             "displayById.displayType.screenSize",
             new { id = displayResponse.Data }
         );

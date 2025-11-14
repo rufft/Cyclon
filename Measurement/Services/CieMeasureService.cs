@@ -5,6 +5,7 @@ using Cyclone.Common.SimpleSoftDelete;
 using HotChocolate.Types.Composite;
 using Measurement.Context;
 using Measurement.Dto;
+using Measurement.GraphQL;
 using Measurement.Models.MeasureTypes;
 using ILogger = Serilog.ILogger;
 
@@ -30,19 +31,34 @@ public class CieMeasureService(MeasureDbContext db, SimpleClient client, ILogger
          if (!Guid.TryParse(dto.DisplayId, out var expectedDisplayId))
              return "Id не в формате Guid";
          
-         var response = await client.GetIdByIdAsync("Display", expectedDisplayId);
+         var displayIdResponse = await client.GetIdByIdAsync("Display", expectedDisplayId);
          
-         if (response.Failure)
-             return Response<CieMeasure>.Fail(message: response.Message, errors: response.Errors.ToArray());
+         if (displayIdResponse.Failure)
+             return Response<CieMeasure>.Fail(message: displayIdResponse.Message, errors: displayIdResponse.Errors);
          
-         if (response.Data is null)
+         if (displayIdResponse.Data is null)
              return Response<CieMeasure>.Fail(
                  message: $"Дисплея с id-- {expectedDisplayId} не существует",
-                 errors: response.Errors.ToArray());
+                 errors: displayIdResponse.Errors);
          
-         var displayId = response.Data.Value;
+         var displayId = displayIdResponse.Data.Value;
          
-         var cieMeasure = new CieMeasure(displayId, cieX, cieY, lv);
+         var batchIdResponse = await client.ExecutePathAsync<Guid?>(
+             QueryTemplates.BatchIdByDisplayId,
+             "displayById.batchId",
+             new { id = displayId }
+         );
+         
+         if (batchIdResponse.Failure)
+             return Response<CieMeasure>.Fail(message: batchIdResponse.Message, errors: batchIdResponse.Errors);
+         
+         if (batchIdResponse.Data == null)
+             return Response<CieMeasure>.Fail(
+                 message: $"Дисплея с id-- {expectedDisplayId} не существует",
+                 errors: displayIdResponse.Errors);
+         var batchId = batchIdResponse.Data.Value;
+         
+         var cieMeasure = new CieMeasure(batchId, displayId, cieX, cieY, lv);
     
          return await CreateAsync(cieMeasure);
     }

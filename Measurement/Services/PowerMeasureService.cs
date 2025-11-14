@@ -5,6 +5,7 @@ using Cyclone.Common.SimpleService;
 using Cyclone.Common.SimpleSoftDelete;
 using Measurement.Context;
 using Measurement.Dto;
+using Measurement.GraphQL;
 using Measurement.Models.MeasureTypes;
 using ILogger = Serilog.ILogger;
 
@@ -39,8 +40,23 @@ public class PowerMeasureService(
                 errors: response.Errors.ToArray());
 
         var displayId = response.Data.Value;
+        
+        var batchIdResponse = await client.ExecutePathAsync<Guid?>(
+            QueryTemplates.BatchIdByDisplayId,
+            "displayById.batchId",
+            new { id = displayId }
+        );
+         
+        if (batchIdResponse.Failure)
+            return Response<PowerMeasure>.Fail(message: batchIdResponse.Message, errors: batchIdResponse.Errors);
+         
+        if (batchIdResponse.Data == null)
+            return Response<PowerMeasure>.Fail(
+                message: $"Дисплея с id-- {expectedDisplayId} не существует",
+                errors: batchIdResponse.Errors);
+        var batchId = batchIdResponse.Data.Value;
 
-        var powerMeasure = new PowerMeasure(displayId, dto.PowerPairs.ToList(), dto.ReversePowerPairs);
+        var powerMeasure = new PowerMeasure(batchId, displayId, dto.PowerPairs.ToList(), dto.ReversePowerPairs);
 
         return await CreateAsync(powerMeasure);
     }

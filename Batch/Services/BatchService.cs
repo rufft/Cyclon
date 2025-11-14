@@ -50,15 +50,18 @@ public class BatchService(BatchDbContext db, ILogger logger) : SimpleService<Mod
         
         if (dto.Number is <= BATCH_NUM_MIN or > BATCH_NUM_MAX)
             return$"Номер партии не может быть меньше {BATCH_NUM_MIN} или быть больше {BATCH_NUM_MAX}";
-        batch.Number = dto.Number!.Value;
+        if (dto.Number.HasValue)
+            batch.Number = dto.Number!.Value;
             
         if (!string.IsNullOrWhiteSpace(dto.Name) && dto.Name.Length > BATCH_NAME_MAX)
             return $"Имя не может быть больше {BATCH_NAME_MAX} символов";
-        batch.Name = dto.Name!;
+        if (!string.IsNullOrEmpty(dto.Name))
+            batch.Name = dto.Name!;
         
         if (!string.IsNullOrWhiteSpace(dto.Description) && dto.Description.Length > BATCH_DESC_MAX)
             return $"Описание не может быть больше {BATCH_DESC_MAX}";
-        batch.Description = dto.Description;
+        if (!string.IsNullOrEmpty(dto.Description))
+            batch.Description = dto.Description;
         
         if (!string.IsNullOrWhiteSpace(dto.Color) 
             && !Enum.TryParse<DisplayColor>(dto.Color, ignoreCase: true, out _))

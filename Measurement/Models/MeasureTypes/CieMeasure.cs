@@ -6,14 +6,16 @@ public class CieMeasure : Measure
 {
     private CieMeasure() { }
     
-    public CieMeasure(Guid displayId, Cie cie, double lv)
+    public CieMeasure(Guid batchId, Guid displayId, Cie cie, double lv)
     {
+        BatchId = batchId;
         DisplayId = displayId;
         Cie = cie;
         Lv = lv;
     }
-    public CieMeasure(Guid displayId, double cieX, double cieY, double lv)
+    public CieMeasure(Guid batchId, Guid displayId, double cieX, double cieY, double lv)
     {
+        BatchId = batchId;
         DisplayId = displayId;
         Cie = new Cie(cieX, cieY);
         Lv = lv;

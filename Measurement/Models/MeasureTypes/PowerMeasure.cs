@@ -18,8 +18,9 @@ public class PowerMeasure : Measure
     
     public PowerPair? ReversePowerPair { get; internal set; }
 
-    public PowerMeasure(Guid displayId, List<PowerPair> powerPairs, PowerPair? reversePowerPair = null)
+    public PowerMeasure(Guid batchId, Guid displayId, List<PowerPair> powerPairs, PowerPair? reversePowerPair = null)
     {
+        BatchId = batchId;
         DisplayId = displayId;
         PowerPairs = PowerPair.IsInCorrectChanel(powerPairs)
             ? powerPairs

@@ -5,7 +5,6 @@ namespace Recipes.Models;
 public class Material : BaseEntity
 {
     // HIL, Host1, BH etc.
-    
     private Material() { }
     
     public Material(string name, string? description)
